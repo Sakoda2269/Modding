@@ -24,7 +24,7 @@ public class PVPmod {
 		BlockInit.BLOCKS.register(modEventBus);
 		TileEntityInit.TILE_ENTITY_TYPES.register(modEventBus);
 		MinecraftForge.EVENT_BUS.register(this);
-		
+		System.out.println("s");
 	}
 	
 	private void setup(final FMLCommonSetupEvent event) {
