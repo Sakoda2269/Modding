@@ -26,13 +26,13 @@ public class Lod extends Item{
 		BlockHitResult ray = reyTrace(world, player, ClipContext.Fluid.NONE);
 		BlockPos lookPos = ray.getBlockPos().relative(ray.getDirection());
 		
-		player.setDeltaMovement(new Vec3(0, 2f, 0));
+		//player.setDeltaMovement(new Vec3(0, 2f, 0));
+		//player.setDeltaMovement(lookDire(world, player));
+		player.moveTo(lookPos, player.getYRot(), player.getXRot());
+		
 		
 		if(!world.isClientSide()) {
 			//world.explode(null, lookPos.getX(),  lookPos.getY(),  lookPos.getZ(), 10, Explosion.BlockInteraction.NONE);
-			
-			//world.addFreshEntity(new LightningBolt(EntityType.LIGHTNING_BOLT, world));
-			
 			
 			
 			/*LightningBolt bolt = EntityType.LIGHTNING_BOLT.create(world);
@@ -40,9 +40,6 @@ public class Lod extends Item{
 			world.addFreshEntity(bolt);*/
 			
 		}
-		//player.setPos(lookPos.getX(), lookPos.getY(), lookPos.getZ());
-		
-		//player.jumpFromGround();
 		
 		return super.use(world, player, hand);
 	}
@@ -61,6 +58,21 @@ public class Lod extends Item{
 		float f7 = f2 * f4;
 		Vec3 vector3d1 = vector3d.add((double)f6 * range, (double)f5 * range, (double)f7 * range);
 		return world.clip(new ClipContext(vector3d, vector3d1, ClipContext.Block.OUTLINE, fluidMode, player));
+	}
+	
+	protected static Vec3 lookDire(Level world, Player player) {
+		double range = 3;
+		
+		float f = player.getXRot();
+		float f1 = player.getYRot();
+		Vec3 vector3d = player.getEyePosition(1.0f);
+		float f2 = Mth.cos(-f1 * ((float)Math.PI / 180f) - (float)Math.PI);
+		float f3 = Mth.sin(-f1 * ((float)Math.PI / 180f) - (float)Math.PI);
+		float f4 = -Mth.cos(-f * ((float)Math.PI / 180f));
+		float f5 = Mth.sin(-f * ((float)Math.PI / 180f));
+		float f6 = f3 * f4;
+		float f7 = f2 * f4;
+		return new Vec3((double)f6 * range, (double)f5 * range, (double)f7 * range);
 	}
 	
 	
