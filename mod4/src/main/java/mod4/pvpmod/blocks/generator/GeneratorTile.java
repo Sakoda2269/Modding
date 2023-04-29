@@ -42,15 +42,13 @@ public class GeneratorTile extends BlockEntity implements MenuProvider{
 	
 	private LazyOptional<IItemHandler> lazyItemHandler = LazyOptional.empty();
 	
-	//private LazyOptional<ItemStackHandler> itemHandler = LazyOptional.of(() -> new ItemStackHandler(1));
-
 	
 	public GeneratorTile(BlockPos pos, BlockState state) {
 		super(TileEntityInit.GENERATOR.get(), pos, state);
-		this.data = new ContainerData() {
+		this.data = new ContainerData() {//アイテム以外のデータを管理
 
 			@Override
-			public int get(int index) {
+			public int get(int index) {//データを取得
 				return switch(index) {
 				case 0 -> GeneratorTile.this.progress;
 				case 1 -> GeneratorTile.this.maxProgress;
@@ -59,7 +57,7 @@ public class GeneratorTile extends BlockEntity implements MenuProvider{
 			}
 
 			@Override
-			public void set(int index, int value) {
+			public void set(int index, int value) {//データを設定
 				switch (index) {
 				case 0 -> GeneratorTile.this.progress = value;
 				case 1-> GeneratorTile.this.maxProgress = value;
@@ -67,7 +65,7 @@ public class GeneratorTile extends BlockEntity implements MenuProvider{
 			}
 
 			@Override
-			public int getCount() {
+			public int getCount() {//管理するデータの個数
 				return 2;
 			}
 			
@@ -75,39 +73,39 @@ public class GeneratorTile extends BlockEntity implements MenuProvider{
 	}
 	
 	@Override
-	public void onLoad() {
+	public void onLoad() {//必要
 		super.onLoad();
 		lazyItemHandler = LazyOptional.of(() -> itemHandler);
 	}
 	
 	@Override
-	public void invalidateCaps() {
+	public void invalidateCaps() {//必要
 		super.invalidateCaps();
 		lazyItemHandler.invalidate();
 	}
 
 	@Override
-	public void load(CompoundTag nbt) {
+	public void load(CompoundTag nbt) {//スロットのアイテム情報の読み込み
 		super.load(nbt);
 		nbt.put("inventory", itemHandler.serializeNBT());
 	}
 
 	@Override
-	protected void saveAdditional(CompoundTag nbt) {
+	protected void saveAdditional(CompoundTag nbt) {//スロットのアイテム情報の保存
 		super.saveAdditional(nbt);
 		itemHandler.deserializeNBT(nbt.getCompound("inventory"));
 	}
 	
-	public void drops() {
+	public void drops() {//破壊された時の処理
 		SimpleContainer inventory = new SimpleContainer(itemHandler.getSlots());
 		for(int i = 0; i < itemHandler.getSlots(); i++) {
 			inventory.setItem(i, itemHandler.getStackInSlot(i));
 		}
-		Containers.dropContents(this.level, this.worldPosition,  inventory);
+		Containers.dropContents(this.level, this.worldPosition,  inventory);//アイテムをドロップ
 	}
 
 	@Override
-	public <T> @NotNull LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
+	public <T> @NotNull LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {//必要
 		
 		if(cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
 			return lazyItemHandler.cast();
@@ -117,18 +115,18 @@ public class GeneratorTile extends BlockEntity implements MenuProvider{
 	}
 
 	@Override
-	public AbstractContainerMenu createMenu(int id, Inventory inventory, Player player) {
+	public AbstractContainerMenu createMenu(int id, Inventory inventory, Player player) {//Menuを紐づける
 		return new GeneratorMenu(id, inventory, this, this.data);
 	}
 
 	@Override
-	public Component getDisplayName() {
+	public Component getDisplayName() {//guiに表示される名前
 		return Component.literal("Generator");
 	}
 	
 	
 	
-	public static void tick(Level world, BlockPos pos, BlockState state, GeneratorTile entity) {
+	public static void tick(Level world, BlockPos pos, BlockState state, GeneratorTile entity) {//1/20秒ごとに処理をする
 		if(world.isClientSide) {
 			return;
 		}
