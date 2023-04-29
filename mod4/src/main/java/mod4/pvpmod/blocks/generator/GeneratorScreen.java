@@ -4,13 +4,15 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 
 import mod4.pvpmod.PVPmod;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.components.Button.OnPress;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 
-public class GeneratorScreen extends AbstractContainerScreen<GeneratorMenu>{
+public class GeneratorScreen extends AbstractContainerScreen<GeneratorMenu> implements OnPress{
 
 	private static final ResourceLocation TEXTURE = new ResourceLocation(PVPmod.MOD_ID, "textures/gui/generator.png");
 	
@@ -40,6 +42,10 @@ public class GeneratorScreen extends AbstractContainerScreen<GeneratorMenu>{
 		
 		this.blit(stack, x, y, 0, 0, imageWidth, imageHeight);
 		renderProgressArrow(stack, x, y);
+		Component text = Component.literal("アップグレード");
+		Button btn = new Button(10 ,10 ,50 ,20, text, this);
+		this.addRenderableWidget(btn);
+		
 	}
 
 	@Override
@@ -48,6 +54,13 @@ public class GeneratorScreen extends AbstractContainerScreen<GeneratorMenu>{
 		super.render(poseStack, mouseX, mouseY, delta);
 		renderTooltip(poseStack, mouseX, mouseY);
 	}
+
+	@Override
+	public void onPress(Button btn) {
+		GeneratorTile.craftItem(menu.be);
+	}
+	
+	
 	
 	
 

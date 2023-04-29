@@ -149,7 +149,7 @@ public class GeneratorTile extends BlockEntity implements MenuProvider{
 		this.progress = 0;
 	}
 	
-	private static void craftItem(GeneratorTile entity) {
+	public static void craftItem(GeneratorTile entity) {
 		if(hasRecipe(entity)) {
 			entity.itemHandler.extractItem(1, 1, false);
 			entity.itemHandler.setStackInSlot(2, new ItemStack(Items.DIAMOND, entity.itemHandler.getStackInSlot(2).getCount() + 1));
