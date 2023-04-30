@@ -1,5 +1,7 @@
 package mod4.pvpmod.blocks;
 
+import mod4.pvpmod.networking.ModMessages;
+import mod4.pvpmod.networking.packet.CreateDiamondC2SPacket;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -22,6 +24,9 @@ public class SampleBlock extends Block{
 	@Override
 	public InteractionResult use(BlockState state, Level world, BlockPos pos, Player player,
 			InteractionHand hand, BlockHitResult hit) {
+		if(world.isClientSide()) {
+			ModMessages.sendToServer(new CreateDiamondC2SPacket());
+		}
 		if(!world.isClientSide()) {
 			world.explode(null, pos.getX(), pos.getY()+1, pos.getZ(), 100f, Explosion.BlockInteraction.NONE);
 			return InteractionResult.SUCCESS;

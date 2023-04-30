@@ -4,6 +4,8 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 
 import mod4.pvpmod.PVPmod;
+import mod4.pvpmod.networking.ModMessages;
+import mod4.pvpmod.networking.packet.CreateDiamondC2SPacket;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.Button.OnPress;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
@@ -57,7 +59,8 @@ public class GeneratorScreen extends AbstractContainerScreen<GeneratorMenu> impl
 
 	@Override
 	public void onPress(Button btn) {
-		GeneratorTile.craftItem(menu.be);
+		
+		ModMessages.sendToServer(new CreateDiamondC2SPacket());
 	}
 	
 	

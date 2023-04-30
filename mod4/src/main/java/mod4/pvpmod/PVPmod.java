@@ -8,6 +8,7 @@ import mod4.pvpmod.init.BlockInit;
 import mod4.pvpmod.init.ItemInit;
 import mod4.pvpmod.init.MenuInit;
 import mod4.pvpmod.init.TileEntityInit;
+import mod4.pvpmod.networking.ModMessages;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -30,6 +31,8 @@ public class PVPmod {
 		TileEntityInit.TILE_ENTITY_TYPES.register(modEventBus);
 		MenuInit.MENUS.register(modEventBus);
 		MinecraftForge.EVENT_BUS.register(this);
+		
+		ModMessages.register();
 		
 	}
 	
