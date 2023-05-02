@@ -4,10 +4,10 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 
 import mod4.pvpmod.PVPmod;
-import mod4.pvpmod.networking.ModMessages;
-import mod4.pvpmod.networking.packet.CreateDiamondC2SPacket;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.Button.OnPress;
+import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
@@ -18,6 +18,8 @@ public class GeneratorScreen extends AbstractContainerScreen<GeneratorMenu> impl
 
 	private static final ResourceLocation TEXTURE = new ResourceLocation(PVPmod.MOD_ID, "textures/gui/generator.png");
 	
+	Button btn;
+	EditBox edit;
 	
 	public GeneratorScreen(GeneratorMenu menu, Inventory inventory, Component component) {
 		super(menu, inventory, component);
@@ -26,6 +28,18 @@ public class GeneratorScreen extends AbstractContainerScreen<GeneratorMenu> impl
 	@Override
 	protected void init() {
 		super.init();
+		this.minecraft.keyboardHandler.setSendRepeatsToGui(true);
+		
+		btn = new Button(10 ,10 ,50 ,20, Component.literal("アップグレード"), this);
+		edit = new EditBox(this.font, this.leftPos + 40, this.topPos + 40, 100, 20, Component.literal(""));
+		this.addRenderableWidget(edit);
+		this.addRenderableWidget(btn);
+		edit.setMaxLength(100);
+		edit.setEditable(true);
+		edit.setFocus(true);
+		this.setInitialFocus(edit);
+		edit.active = true;
+		
 	}
 	
 	private void renderProgressArrow(PoseStack poseStack, int x, int y) {
@@ -44,9 +58,8 @@ public class GeneratorScreen extends AbstractContainerScreen<GeneratorMenu> impl
 		
 		this.blit(stack, x, y, 0, 0, imageWidth, imageHeight);
 		renderProgressArrow(stack, x, y);
-		Component text = Component.literal("アップグレード");
-		Button btn = new Button(10 ,10 ,50 ,20, text, this);
-		this.addRenderableWidget(btn);
+		
+		
 		
 	}
 
@@ -56,14 +69,34 @@ public class GeneratorScreen extends AbstractContainerScreen<GeneratorMenu> impl
 		super.render(poseStack, mouseX, mouseY, delta);
 		renderTooltip(poseStack, mouseX, mouseY);
 	}
+	
+	
+	
+	@Override
+	public boolean keyPressed(int p1, int p2, int p3) {
+		if(edit.isFocused() && !(p1 == 259 && p2 == 14)) {
+			return super.keyPressed(0, 0, 0);
+		}
+		System.out.println(p1 + ", " + p2 + "," + p3);
+		return super.keyPressed(p1, p2, p3);
+	}
 
 	@Override
-	public void onPress(Button btn) {
-		
-		ModMessages.sendToServer(new CreateDiamondC2SPacket());
+	protected void containerTick() {
+		super.containerTick();
+		edit.tick();
 	}
 	
 	
+
+	@SuppressWarnings("resource")
+	@Override
+	public void onPress(Button btn) {
+		Minecraft.getInstance().gameMode.handleInventoryButtonClick(this.menu.containerId, 0);
+		//System.out.println(this.menu.getSlot(0));
+		//ModMessages.sendToServer(new GeneratorTile.packet());
+	
+	}
 	
 	
 

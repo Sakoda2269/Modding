@@ -11,6 +11,7 @@ import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.inventory.SimpleContainerData;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.items.CapabilityItemHandler;
@@ -61,6 +62,15 @@ public class GeneratorMenu extends AbstractContainerMenu{
 		return data.get(0) > 0;
 	}
 	
+	
+	
+
+	@Override
+	public boolean clickMenuButton(Player p_38875_, int id) {
+		this.getSlot(0).set(new ItemStack(Items.DIAMOND));
+		return super.clickMenuButton(p_38875_, id);
+	}
+
 	public int getScaledProgress() {
 		int progress = this.data.get(0);
 		int maxProgress = this.data.get(1);
@@ -101,7 +111,6 @@ public class GeneratorMenu extends AbstractContainerMenu{
 
 	@Override
 	public boolean stillValid(Player player) {//必要
-		// TODO 自動生成されたメソッド・スタブ
 		return stillValid(ContainerLevelAccess.create(level, be.getBlockPos()), player, BlockInit.GENERATOR.get());
 	}
 	

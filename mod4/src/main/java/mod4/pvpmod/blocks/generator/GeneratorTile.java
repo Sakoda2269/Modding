@@ -33,6 +33,9 @@ public class GeneratorTile extends BlockEntity implements MenuProvider{
 	private int maxProgress = 70;
 	protected final ContainerData data;
 	
+	private boolean pressed = false;
+	
+	
 	private final ItemStackHandler itemHandler = new ItemStackHandler(3) {
 		@Override
 		protected void onContentsChanged(int slot) {
@@ -130,7 +133,7 @@ public class GeneratorTile extends BlockEntity implements MenuProvider{
 		if(world.isClientSide) {
 			return;
 		}
-		
+		/*entity.itemHandler.setStackInSlot(2, new ItemStack(Items.DIAMOND, entity.itemHandler.getStackInSlot(2).getCount() + 1));
 		if(hasRecipe(entity)) {
 			entity.progress++;
 			setChanged(world, pos, state);
@@ -141,7 +144,7 @@ public class GeneratorTile extends BlockEntity implements MenuProvider{
 		}else {
 			entity.resetProgress();
 			setChanged(world, pos, state);
-		}
+		}*/
 		
 	}
 	
@@ -155,6 +158,15 @@ public class GeneratorTile extends BlockEntity implements MenuProvider{
 			entity.itemHandler.setStackInSlot(2, new ItemStack(Items.DIAMOND, entity.itemHandler.getStackInSlot(2).getCount() + 1));
 			entity.resetProgress();
 		}
+	}
+	
+	public static void makeDia(GeneratorTile entity) {
+		entity.itemHandler.setStackInSlot(2, new ItemStack(Items.DIAMOND, entity.itemHandler.getStackInSlot(2).getCount() + 1));
+	}
+	
+	public void press() {
+		System.out.println("pressed!");
+		pressed = true;
 	}
 	
 	private static boolean hasRecipe(GeneratorTile entity) {

@@ -14,9 +14,8 @@ public class ModMessages {
 	
 	private static SimpleChannel INSTANCE;
 	
-	private static int packetId;
+	private static int packetId = 0;
 	
-	@SuppressWarnings("unused")
 	private static int id() {
 		return packetId++;
 	}
@@ -31,17 +30,19 @@ public class ModMessages {
 		
 		INSTANCE = net;
 		
-		net.messageBuilder(C2SPacket.class, id(), NetworkDirection.PLAY_TO_SERVER)
-			.decoder(C2SPacket :: new)
-			.encoder(C2SPacket :: toBytes)
-			.consumerMainThread(C2SPacket :: handle)
-			.add();;
-			
 		net.messageBuilder(CreateDiamondC2SPacket.class, id(), NetworkDirection.PLAY_TO_SERVER)
 			.decoder(CreateDiamondC2SPacket :: new)
 			.encoder(CreateDiamondC2SPacket :: toBytes)
 			.consumerMainThread(CreateDiamondC2SPacket :: handle)
-			.add();;
+			.add();
+		
+		net.messageBuilder(C2SPacket.class, id(), NetworkDirection.PLAY_TO_SERVER)
+			.decoder(C2SPacket :: new)
+			.encoder(C2SPacket :: toBytes)
+			.consumerMainThread(C2SPacket :: handle)
+			.add();
+			
+		
 		
 	}
 	
