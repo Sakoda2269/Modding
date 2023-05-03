@@ -41,27 +41,29 @@ public class GeneratorScreen extends AbstractContainerScreen<GeneratorMenu> impl
 		this.imageWidth = 235;
 		Predicate<String> check = str -> checker(str);
 		
-		num1 = new EditBox(font, this.leftPos + 40, this.topPos + 30, 20, 15, edi);
+		num1 = new EditBox(font, this.leftPos + 50, this.topPos + 30, 20, 15, edi);
 		this.addRenderableWidget(num1);
 		num1.setMaxLength(2);
 		num1.setEditable(true);
 		num1.setFilter(check);
 		
-		num2 = new EditBox(font, this.leftPos + 40, this.topPos + 60, 20, 15, edi);
+		num2 = new EditBox(font, this.leftPos + 50, this.topPos + 60, 20, 15, edi);
 		this.addRenderableWidget(num2);
 		num2.setMaxLength(2);
 		num2.setEditable(true);
 		num2.setFilter(check);
 		
-		num3 = new EditBox(font, this.leftPos + 40, this.topPos + 90, 20, 15, edi);
+		num3 = new EditBox(font, this.leftPos + 50, this.topPos + 90, 20, 15, edi);
 		this.addRenderableWidget(num3);
 		num3.setMaxLength(2);
 		num3.setEditable(true);
 		num2.setFilter(check);
 		
+		Button btn = new Button(0, 0, 50, 20, Component.literal("aaa"), this);
 		
+		this.addRenderableWidget(btn);
 		
-		this.setInitialFocus(num1);
+		//this.setInitialFocus(num1);
 		//rebuildWidgets();
 	}
 	
@@ -108,6 +110,24 @@ public class GeneratorScreen extends AbstractContainerScreen<GeneratorMenu> impl
 	}
 	
 	
+	@Override
+	protected void renderLabels(PoseStack poseStack, int p1, int p2) {
+		super.renderLabels(poseStack, p1, p2);
+		poseStack.pushPose();
+		poseStack.scale(1.5f, 1.5f, 1.5f);
+		//drawString(poseStack, font, Component.literal("/"), 30, 30, 0x000000);
+		//drawCenteredString(poseStack, font, "/", 20, 20, 0x000000);
+		//this.font.draw(poseStack, Component.literal("per"), 20, 20, 4210752);
+		poseStack.popPose();
+		this.font.draw(poseStack, Component.literal("per"), 32, 35, 4210752);
+		this.font.draw(poseStack, Component.literal("s"), 73, 39, 4210752);
+		
+		this.font.draw(poseStack, Component.literal("per"), 32, 65, 4210752);
+		this.font.draw(poseStack, Component.literal("s"), 73, 69, 4210752);
+		
+		this.font.draw(poseStack, Component.literal("per"), 32, 95, 4210752);
+		this.font.draw(poseStack, Component.literal("s"), 73, 99, 4210752);
+	}
 
 	@Override
 	public boolean keyPressed(int p1, int p2, int p3) {

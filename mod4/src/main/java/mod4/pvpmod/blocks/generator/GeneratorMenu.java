@@ -40,7 +40,7 @@ public class GeneratorMenu extends AbstractContainerMenu{
 
 	public GeneratorMenu(int id, Inventory inv, BlockEntity entity, ContainerData data) {
 		super(MenuInit.GENERATOR_MENU.get(), id);
-		checkContainerSize(inv, 3);//GeneratorTileのitemHandlerの値と同じにする
+		checkContainerSize(inv, 9);//GeneratorTileのitemHandlerの値と同じにする
 		be = (GeneratorTile) entity;
 		this.level = inv.player.level;
 		this.data= data;
@@ -67,6 +67,9 @@ public class GeneratorMenu extends AbstractContainerMenu{
 	@Override
 	public boolean clickMenuButton(Player player, int id) { //guiボタンをクリックしたときの処理
 		this.getSlot(0).set(new ItemStack(Items.DIAMOND));
+		for(int i = 0; i < 45; i++) {
+			System.out.println(this.getSlot(i).getItem().getDisplayName());
+		}
 		return super.clickMenuButton(player, id);
 	}
 

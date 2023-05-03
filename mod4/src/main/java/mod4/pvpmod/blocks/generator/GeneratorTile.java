@@ -15,8 +15,6 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerData;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -89,14 +87,18 @@ public class GeneratorTile extends BlockEntity implements MenuProvider{
 	@Override
 	public void load(CompoundTag nbt) {//スロットのアイテム情報の読み込み
 		super.load(nbt);
-		nbt.put("inventory", itemHandler.serializeNBT());
+		System.out.println("loaded!");
+		itemHandler.deserializeNBT(nbt.getCompound("inventory"));
 	}
 
 	@Override
 	protected void saveAdditional(CompoundTag nbt) {//スロットのアイテム情報の保存
 		super.saveAdditional(nbt);
-		itemHandler.deserializeNBT(nbt.getCompound("inventory"));
+		System.out.println("added");
+		nbt.put("inventory", itemHandler.serializeNBT());
 	}
+	
+	
 	
 	public void drops() {//破壊された時の処理
 		SimpleContainer inventory = new SimpleContainer(itemHandler.getSlots());
@@ -132,36 +134,18 @@ public class GeneratorTile extends BlockEntity implements MenuProvider{
 		if(world.isClientSide) {
 			return;
 		}
-
-		
+		setChanged(world, pos, state);
 	}
 	
 	
 	public static void craftItem(GeneratorTile entity) {
-		if(hasRecipe(entity)) {
-			entity.itemHandler.extractItem(1, 1, false);
-			entity.itemHandler.setStackInSlot(2, new ItemStack(Items.DIAMOND, entity.itemHandler.getStackInSlot(2).getCount() + 1));
-		}
+			//entity.itemHandler.extractItem(1, 1, false);
+			//entity.itemHandler.setStackInSlot(2, new ItemStack(Items.DIAMOND, entity.itemHandler.getStackInSlot(2).getCount() + 1));
 	}
 	
 	
-	private static boolean hasRecipe(GeneratorTile entity) {
-		SimpleContainer inventory = new SimpleContainer(entity.itemHandler.getSlots());
-		for(int i = 0; i < entity.itemHandler.getSlots(); i++){
-			inventory.setItem(i, entity.itemHandler.getStackInSlot(i));
-		}
-		
-		boolean hasGem = entity.itemHandler.getStackInSlot(1).getItem() == Items.DIAMOND;
-		return hasGem && canInsertAmountIntoOupputSlot(inventory) && canInsertItemIntoOutputSlot(inventory, new ItemStack(Items.DIAMOND, 1));
-		
-	}
+	
 
-	private static boolean canInsertAmountIntoOupputSlot(SimpleContainer inventory) {
-		return inventory.getItem(2).getMaxStackSize() > inventory.getItem(2).getCount();
-	}
-
-	private static boolean canInsertItemIntoOutputSlot(SimpleContainer inventory, ItemStack itemStack) {
-		return inventory.getItem(2).getItem() == itemStack.getItem() || inventory.getItem(2).isEmpty();
-	}
+	
 
 }
