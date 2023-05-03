@@ -32,7 +32,7 @@ public class GeneratorMenu extends AbstractContainerMenu{
 	private static final int VANILLA_FIRST_SLOT_INDEX = 0;
 	private static final int TE_INVENTORY_FIRST_SLOT_INDEX = VANILLA_FIRST_SLOT_INDEX + VANILLA_SLOT_COUNT;
 	
-	private static final int TE_INVENTORY_SLOT_COUNT = 3;//GeneratorTileのitemHandlerの値と同じにする
+	private static final int TE_INVENTORY_SLOT_COUNT = 9;//GeneratorTileのitemHandlerの値と同じにする
 	
 	public GeneratorMenu(int id, Inventory inv, FriendlyByteBuf extraData) {
 		this(id, inv, inv.player.level.getBlockEntity(extraData.readBlockPos()), new SimpleContainerData(2));//GeneratorTileのコンストラクターのgetCount()の値と同じにする
@@ -49,37 +49,29 @@ public class GeneratorMenu extends AbstractContainerMenu{
 		addPlayerHotbar(inv);//guiにプレイヤーのホットバーも表示する
 		
 		this.be.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(hendler -> {
-			this.addSlot(new SlotItemHandler(hendler, 0, 12, 15));//index = 0,x = 12, y = 15にスロットを追加
-			this.addSlot(new SlotItemHandler(hendler, 1, 86, 15));
-			this.addSlot(new SlotItemHandler(hendler, 2, 86, 68));
+			this.addSlot(new SlotItemHandler(hendler, 0, 10, 30));//index = 0,x = 12, y = 15にスロットを追加
+			this.addSlot(new SlotItemHandler(hendler, 1, 10, 60));
+			this.addSlot(new SlotItemHandler(hendler, 2, 10, 90));
+			this.addSlot(new SlotItemHandler(hendler, 3, 85, 30));
+			this.addSlot(new SlotItemHandler(hendler, 4, 85, 60));
+			this.addSlot(new SlotItemHandler(hendler, 5, 85, 90));
+			this.addSlot(new SlotItemHandler(hendler, 6, 160, 30));
+			this.addSlot(new SlotItemHandler(hendler, 7, 160, 60));
+			this.addSlot(new SlotItemHandler(hendler, 8, 160, 90));
 		});
 		
 		addDataSlots(data);//アイテム以外のデータを管理
 		
 	}
 	
-	public boolean isCrafting() {
-		return data.get(0) > 0;
-	}
-	
-	
-	
-
 	@Override
-	public boolean clickMenuButton(Player p_38875_, int id) {
+	public boolean clickMenuButton(Player player, int id) { //guiボタンをクリックしたときの処理
 		this.getSlot(0).set(new ItemStack(Items.DIAMOND));
-		return super.clickMenuButton(p_38875_, id);
-	}
-
-	public int getScaledProgress() {
-		int progress = this.data.get(0);
-		int maxProgress = this.data.get(1);
-		int progressArrowSize = 26;
-		return maxProgress != 0 && progress != 0 ? progress * progressArrowSize / maxProgress : 0;
+		return super.clickMenuButton(player, id);
 	}
 
 	@Override
-	public ItemStack quickMoveStack(Player playerIn, int index) {//必要
+	public ItemStack quickMoveStack(Player playerIn, int index) {//必要(シフトクリック時の処理？)
 		Slot sourceSlot = slots.get(index);
 		if(sourceSlot == null || !sourceSlot.hasItem()) {
 			return ItemStack.EMPTY;
@@ -117,14 +109,14 @@ public class GeneratorMenu extends AbstractContainerMenu{
 	private void addPlayerInventory(Inventory playerInv) {//プレイヤーのインベントリの表示
 		for(int i = 0; i < 3; ++i) {
 			for(int j = 0; j < 9; ++j) {
-				this.addSlot(new Slot(playerInv, j + i * 9 + 9, 8 + j * 18, 86 + i * 18));
+				this.addSlot(new Slot(playerInv, j + i * 9 + 9, 36 + j * 18, 143 + i * 18));
 			}
 		}
 	}
 	
 	private void addPlayerHotbar(Inventory playerInv) {//プレイヤーのホットバーの表示
 		for(int i = 0; i < 9; ++i) {
-			this.addSlot(new Slot(playerInv, i, 8 + i * 18, 144));
+			this.addSlot(new Slot(playerInv, i, 36 + i * 18, 201));
 		}
 	}
 

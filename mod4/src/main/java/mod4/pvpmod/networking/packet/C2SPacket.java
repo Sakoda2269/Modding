@@ -4,8 +4,6 @@ package mod4.pvpmod.networking.packet;
 import java.util.function.Supplier;
 
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkEvent;
 
 public class C2SPacket {
@@ -26,10 +24,8 @@ public class C2SPacket {
 		NetworkEvent.Context context = supplier.get();
 		context.enqueueWork(() ->{
 			//サーバーサイドで実行される
-			ServerPlayer player = context.getSender();
-			ServerLevel level = player.getLevel();
-			System.out.println("aaa");
-			//EntityType.COW.spawn(level, null, null, player.blockPosition(), MobSpawnType.COMMAND, true, false);
+			//ServerPlayer player = context.getSender();
+			//ServerLevel level = player.getLevel();
 		});
 		return true;
 	}

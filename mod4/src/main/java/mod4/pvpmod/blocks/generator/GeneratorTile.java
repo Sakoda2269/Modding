@@ -33,10 +33,9 @@ public class GeneratorTile extends BlockEntity implements MenuProvider{
 	private int maxProgress = 70;
 	protected final ContainerData data;
 	
-	private boolean pressed = false;
 	
 	
-	private final ItemStackHandler itemHandler = new ItemStackHandler(3) {
+	private final ItemStackHandler itemHandler = new ItemStackHandler(9) { //保有できるアイテムの数（カスタムスロット数）
 		@Override
 		protected void onContentsChanged(int slot) {
 			setChanged();
@@ -133,41 +132,18 @@ public class GeneratorTile extends BlockEntity implements MenuProvider{
 		if(world.isClientSide) {
 			return;
 		}
-		/*entity.itemHandler.setStackInSlot(2, new ItemStack(Items.DIAMOND, entity.itemHandler.getStackInSlot(2).getCount() + 1));
-		if(hasRecipe(entity)) {
-			entity.progress++;
-			setChanged(world, pos, state);
-			
-			if(entity.progress >= entity.maxProgress) {
-				craftItem(entity);
-			}
-		}else {
-			entity.resetProgress();
-			setChanged(world, pos, state);
-		}*/
+
 		
 	}
 	
-	private void resetProgress() {
-		this.progress = 0;
-	}
 	
 	public static void craftItem(GeneratorTile entity) {
 		if(hasRecipe(entity)) {
 			entity.itemHandler.extractItem(1, 1, false);
 			entity.itemHandler.setStackInSlot(2, new ItemStack(Items.DIAMOND, entity.itemHandler.getStackInSlot(2).getCount() + 1));
-			entity.resetProgress();
 		}
 	}
 	
-	public static void makeDia(GeneratorTile entity) {
-		entity.itemHandler.setStackInSlot(2, new ItemStack(Items.DIAMOND, entity.itemHandler.getStackInSlot(2).getCount() + 1));
-	}
-	
-	public void press() {
-		System.out.println("pressed!");
-		pressed = true;
-	}
 	
 	private static boolean hasRecipe(GeneratorTile entity) {
 		SimpleContainer inventory = new SimpleContainer(entity.itemHandler.getSlots());
