@@ -6,6 +6,8 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 
 import mod4.pvpmod.PVPmod;
+import mod4.pvpmod.networking.ModMessages;
+import mod4.pvpmod.networking.packet.SepSenderC2S;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.Button.OnPress;
@@ -59,7 +61,7 @@ public class GeneratorScreen extends AbstractContainerScreen<GeneratorMenu> impl
 		num3.setEditable(true);
 		num2.setFilter(check);
 		
-		Button btn = new Button(0, 0, 50, 20, Component.literal("aaa"), this);
+		Button btn = new Button(this.leftPos + 160, this.topPos + 115, 50, 20, Component.translatable("gui." + PVPmod.MOD_ID + ".generator.confirm_button"), this);
 		
 		this.addRenderableWidget(btn);
 		
@@ -113,12 +115,7 @@ public class GeneratorScreen extends AbstractContainerScreen<GeneratorMenu> impl
 	@Override
 	protected void renderLabels(PoseStack poseStack, int p1, int p2) {
 		super.renderLabels(poseStack, p1, p2);
-		poseStack.pushPose();
-		poseStack.scale(1.5f, 1.5f, 1.5f);
-		//drawString(poseStack, font, Component.literal("/"), 30, 30, 0x000000);
-		//drawCenteredString(poseStack, font, "/", 20, 20, 0x000000);
-		//this.font.draw(poseStack, Component.literal("per"), 20, 20, 4210752);
-		poseStack.popPose();
+		
 		this.font.draw(poseStack, Component.literal("per"), 32, 35, 4210752);
 		this.font.draw(poseStack, Component.literal("s"), 73, 39, 4210752);
 		
@@ -127,27 +124,17 @@ public class GeneratorScreen extends AbstractContainerScreen<GeneratorMenu> impl
 		
 		this.font.draw(poseStack, Component.literal("per"), 32, 95, 4210752);
 		this.font.draw(poseStack, Component.literal("s"), 73, 99, 4210752);
+		
+		this.font.draw(poseStack, Component.translatable("gui." + PVPmod.MOD_ID + ".generator.activate"), 110, 65, 4210752);
 	}
 
 	@Override
 	public boolean keyPressed(int p1, int p2, int p3) {
 		System.out.println(p1 + "," + p2 + "," + p3);
 		if((p1 == 256 && p2 == 1) || (p1 == 259 && p2 == 14)) {//escキーで画面を閉じる、バックスペースを有効
-			num1.setEditable(true);
-			num2.setEditable(true);
-			num3.setEditable(true);
 			return super.keyPressed(p1, p2, p3);
 		}
-		if(48 <= p1 && p1 <= 57 && 2 <= p2 && p2 <= 11) {
-			num1.setEditable(true);
-			num2.setEditable(true);
-			num3.setEditable(true);
-			
-		}
-		else if(num1.isFocused() || num2.isFocused() || num3.isFocused()) {//数字以外は入力されないようにする
-			/*num1.setEditable(false);
-			num3.setEditable(false);
-			num2.setEditable(false);*/
+		else if(num1.isFocused() || num2.isFocused() || num3.isFocused()) {//入力中はeキーでguiを閉じないようにする
 			return false;
 		}
 		//return super.keyPressed(0, 0, 0);
@@ -179,14 +166,24 @@ public class GeneratorScreen extends AbstractContainerScreen<GeneratorMenu> impl
 		opened = false;
 		super.onClose();
 	}
-
+	
 	@SuppressWarnings("resource")
 	@Override
 	public void onPress(Button btn) {
 		Minecraft.getInstance().gameMode.handleInventoryButtonClick(this.menu.containerId, 0);
+		//this.minecraft.player.connection.send(new ServerboundBlockEntityTagQuery(1,menu.be.getBlockPos()));
+		//this.minecraft.player.connection.send(ClientboundBlockEntityDataPacket.create(menu.be));
+		//menu.level.sendBlockUpdated(menu.be.getBlockPos(), menu.be.getBlockState(), menu.be.getBlockState(), 2);
 		//System.out.println(this.menu.getSlot(0));
-		//ModMessages.sendToServer(new GeneratorTile.packet());
+		
+		ModMessages.sendToServer(new SepSenderC2S(stringToInt(num1.getValue())));
+	}
 	
+	public int stringToInt(String str) {
+		if(str.length() == 0) {
+			return -1;
+		}
+		return Integer.parseInt(str);
 	}
 	
 	

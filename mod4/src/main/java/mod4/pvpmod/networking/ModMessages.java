@@ -2,7 +2,7 @@ package mod4.pvpmod.networking;
 
 import mod4.pvpmod.PVPmod;
 import mod4.pvpmod.networking.packet.C2SPacket;
-import mod4.pvpmod.networking.packet.CreateDiamondC2SPacket;
+import mod4.pvpmod.networking.packet.SepSenderC2S;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkDirection;
@@ -30,10 +30,10 @@ public class ModMessages {
 		
 		INSTANCE = net;
 		
-		net.messageBuilder(CreateDiamondC2SPacket.class, id(), NetworkDirection.PLAY_TO_SERVER)
-			.decoder(CreateDiamondC2SPacket :: new)
-			.encoder(CreateDiamondC2SPacket :: toBytes)
-			.consumerMainThread(CreateDiamondC2SPacket :: handle)
+		net.messageBuilder(SepSenderC2S.class, id(), NetworkDirection.PLAY_TO_SERVER)
+			.decoder(SepSenderC2S :: new)
+			.encoder(SepSenderC2S :: toBytes)
+			.consumerMainThread(SepSenderC2S :: handle)
 			.add();
 		
 		net.messageBuilder(C2SPacket.class, id(), NetworkDirection.PLAY_TO_SERVER)

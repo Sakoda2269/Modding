@@ -11,7 +11,6 @@ import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.inventory.SimpleContainerData;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.items.CapabilityItemHandler;
@@ -32,18 +31,20 @@ public class GeneratorMenu extends AbstractContainerMenu{
 	private static final int VANILLA_FIRST_SLOT_INDEX = 0;
 	private static final int TE_INVENTORY_FIRST_SLOT_INDEX = VANILLA_FIRST_SLOT_INDEX + VANILLA_SLOT_COUNT;
 	
-	private static final int TE_INVENTORY_SLOT_COUNT = 9;//GeneratorTileのitemHandlerの値と同じにする
+	private static final int TE_INVENTORY_SLOT_COUNT = 4;//GeneratorTileのitemHandlerの値と同じにする
 	
 	public GeneratorMenu(int id, Inventory inv, FriendlyByteBuf extraData) {
-		this(id, inv, inv.player.level.getBlockEntity(extraData.readBlockPos()), new SimpleContainerData(2));//GeneratorTileのコンストラクターのgetCount()の値と同じにする
+		this(id, inv, inv.player.level.getBlockEntity(extraData.readBlockPos()), new SimpleContainerData(16));//GeneratorTileのコンストラクターのgetCount()の値と同じにする
 	}
 
 	public GeneratorMenu(int id, Inventory inv, BlockEntity entity, ContainerData data) {
 		super(MenuInit.GENERATOR_MENU.get(), id);
-		checkContainerSize(inv, 9);//GeneratorTileのitemHandlerの値と同じにする
+		checkContainerSize(inv, 4);//GeneratorTileのitemHandlerの値と同じにする
 		be = (GeneratorTile) entity;
 		this.level = inv.player.level;
 		this.data= data;
+		
+		data.set(0, 1);
 		
 		addPlayerInventory(inv);//guiにプレイヤーのインベントリも表示する
 		addPlayerHotbar(inv);//guiにプレイヤーのホットバーも表示する
@@ -52,12 +53,7 @@ public class GeneratorMenu extends AbstractContainerMenu{
 			this.addSlot(new SlotItemHandler(hendler, 0, 10, 30));//index = 0,x = 12, y = 15にスロットを追加
 			this.addSlot(new SlotItemHandler(hendler, 1, 10, 60));
 			this.addSlot(new SlotItemHandler(hendler, 2, 10, 90));
-			this.addSlot(new SlotItemHandler(hendler, 3, 85, 30));
-			this.addSlot(new SlotItemHandler(hendler, 4, 85, 60));
-			this.addSlot(new SlotItemHandler(hendler, 5, 85, 90));
-			this.addSlot(new SlotItemHandler(hendler, 6, 160, 30));
-			this.addSlot(new SlotItemHandler(hendler, 7, 160, 60));
-			this.addSlot(new SlotItemHandler(hendler, 8, 160, 90));
+			this.addSlot(new SlotItemHandler(hendler, 3, 85, 60));
 		});
 		
 		addDataSlots(data);//アイテム以外のデータを管理
@@ -66,10 +62,7 @@ public class GeneratorMenu extends AbstractContainerMenu{
 	
 	@Override
 	public boolean clickMenuButton(Player player, int id) { //guiボタンをクリックしたときの処理
-		this.getSlot(0).set(new ItemStack(Items.DIAMOND));
-		for(int i = 0; i < 45; i++) {
-			System.out.println(this.getSlot(i).getItem().getDisplayName());
-		}
+		System.out.println(data.get(0));
 		return super.clickMenuButton(player, id);
 	}
 

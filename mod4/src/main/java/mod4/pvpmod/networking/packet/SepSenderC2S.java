@@ -3,34 +3,35 @@ package mod4.pvpmod.networking.packet;
 
 import java.util.function.Supplier;
 
+import mod4.pvpmod.blocks.generator.GeneratorMenu;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.ClipContext;
-import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.network.NetworkEvent;
 
-public class CreateDiamondC2SPacket {
+public class SepSenderC2S {
 	
 	BlockPos pos;
 	byte a = 1;
+	String value;
+	int num;
 	
-	public CreateDiamondC2SPacket() {
-		
+	public SepSenderC2S(int value) {
+		num = value;
 	}
 	
-	public CreateDiamondC2SPacket(FriendlyByteBuf buf) {
-		
+	public SepSenderC2S(FriendlyByteBuf buf) {
+		num = buf.readInt();
 	}
 	
 	public void toBytes(FriendlyByteBuf buf) {
-		
+		buf.writeInt(num);
 	}
 	
 	public boolean handle(Supplier<NetworkEvent.Context > supplier) {
@@ -38,11 +39,11 @@ public class CreateDiamondC2SPacket {
 		context.enqueueWork(() ->{
 			//サーバーサイドで実行される
 			ServerPlayer player = context.getSender();
-			ServerLevel level = player.getLevel();
+			System.out.println(num);
+			GeneratorMenu menu = (GeneratorMenu)player.containerMenu;
+			menu.data.set(0, num);
+			//System.out.println(player.containerMenu.containerId);
 			
-			BlockHitResult ray = reyTrace(level, player, ClipContext.Fluid.NONE);
-			BlockPos lookPos = ray.getBlockPos().relative(ray.getDirection());
-			level.explode(player, lookPos.getX(), lookPos.getY(), lookPos.getZ(), 10, Explosion.BlockInteraction.NONE);
 		});
 		return true;
 	}
