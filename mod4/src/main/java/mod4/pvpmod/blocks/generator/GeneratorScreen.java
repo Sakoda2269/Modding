@@ -7,7 +7,8 @@ import com.mojang.blaze3d.vertex.PoseStack;
 
 import mod4.pvpmod.PVPmod;
 import mod4.pvpmod.networking.ModMessages;
-import mod4.pvpmod.networking.packet.SepSenderC2S;
+import mod4.pvpmod.networking.packet.ItemPacketC2S;
+import mod4.pvpmod.networking.packet.SepPacketC2S;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.Button.OnPress;
@@ -22,10 +23,16 @@ public class GeneratorScreen extends AbstractContainerScreen<GeneratorMenu> impl
 
 	private static final ResourceLocation TEXTURE = new ResourceLocation(PVPmod.MOD_ID, "textures/gui/generator.png");
 	
+	
 	Component edi = Component.translatable(PVPmod.MOD_ID + ".editbox.edit");
 	EditBox num1;
 	EditBox num2;
 	EditBox num3;
+	
+	Button confirm;
+	Button back;
+	
+	int editTire = 0;
 	
 	public GeneratorScreen(GeneratorMenu menu, Inventory inventory, Component component) {
 		super(menu, inventory, component);
@@ -38,9 +45,10 @@ public class GeneratorScreen extends AbstractContainerScreen<GeneratorMenu> impl
 		this.titleLabelX = 7;
 		this.titleLabelY = 7;
 		this.inventoryLabelX = 20;
-		this.inventoryLabelY = 120;
+		this.inventoryLabelY = 135;
 		this.imageHeight = 230;
 		this.imageWidth = 235;
+		this.editTire = 0;
 		Predicate<String> check = str -> checker(str);
 		
 		num1 = new EditBox(font, this.leftPos + 50, this.topPos + 30, 20, 15, edi);
@@ -61,9 +69,11 @@ public class GeneratorScreen extends AbstractContainerScreen<GeneratorMenu> impl
 		num3.setEditable(true);
 		num2.setFilter(check);
 		
-		Button btn = new Button(this.leftPos + 160, this.topPos + 115, 50, 20, Component.translatable("gui." + PVPmod.MOD_ID + ".generator.confirm_button"), this);
+		confirm = new Button(this.leftPos + 160, this.topPos + 115, 50, 20, Component.translatable("gui." + PVPmod.MOD_ID + ".generator.confirm_button"), this);
+		back = new Button(this.leftPos + 36, this.topPos + 115, 50, 20 , Component.translatable("gui." + PVPmod.MOD_ID + ".generator.back_button"), this);
 		
-		this.addRenderableWidget(btn);
+		this.addRenderableWidget(confirm);
+		this.addRenderableWidget(back);
 		
 		//this.setInitialFocus(num1);
 		//rebuildWidgets();
@@ -94,6 +104,7 @@ public class GeneratorScreen extends AbstractContainerScreen<GeneratorMenu> impl
 		RenderSystem.setShader(GameRenderer::getPositionTexShader);
 		RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
 		RenderSystem.setShaderTexture(0, TEXTURE);
+		
 		int x = (width - imageWidth) / 2;
 		int y = (height - imageHeight) / 2;
 		
@@ -109,6 +120,20 @@ public class GeneratorScreen extends AbstractContainerScreen<GeneratorMenu> impl
 		renderBackground(poseStack);
 		super.render(poseStack, mouseX, mouseY, delta);
 		renderTooltip(poseStack, mouseX, mouseY);
+		if(editTire == 0) {
+			back.visible = false;
+			back.active = false;
+		}else {
+			back.visible = true;
+			back.active = true;
+		}
+		if(editTire == 5) {
+			confirm.visible = false;
+			confirm.active = false;
+		}else {
+			confirm.visible = true;
+			confirm.active = true;
+		}
 	}
 	
 	
@@ -126,6 +151,8 @@ public class GeneratorScreen extends AbstractContainerScreen<GeneratorMenu> impl
 		this.font.draw(poseStack, Component.literal("s"), 73, 99, 4210752);
 		
 		this.font.draw(poseStack, Component.translatable("gui." + PVPmod.MOD_ID + ".generator.activate"), 110, 65, 4210752);
+		
+		this.font.draw(poseStack, Component.literal("Tire" + editTire), 100, 15, 4210752);
 	}
 
 	@Override
@@ -170,13 +197,18 @@ public class GeneratorScreen extends AbstractContainerScreen<GeneratorMenu> impl
 	@SuppressWarnings("resource")
 	@Override
 	public void onPress(Button btn) {
-		Minecraft.getInstance().gameMode.handleInventoryButtonClick(this.menu.containerId, 0);
-		//this.minecraft.player.connection.send(new ServerboundBlockEntityTagQuery(1,menu.be.getBlockPos()));
-		//this.minecraft.player.connection.send(ClientboundBlockEntityDataPacket.create(menu.be));
-		//menu.level.sendBlockUpdated(menu.be.getBlockPos(), menu.be.getBlockState(), menu.be.getBlockState(), 2);
-		//System.out.println(this.menu.getSlot(0));
+		if(btn.equals(confirm)) {
+			Minecraft.getInstance().gameMode.handleInventoryButtonClick(this.menu.containerId, 0);
+			System.out.println(menu.getSlot(0).getItem().getItem());
+
+			ModMessages.sendToServer(new ItemPacketC2S(editTire, menu.getSlot(36).getItem(), menu.getSlot(37).getItem(), menu.getSlot(38).getItem(), menu.getSlot(39).getItem()));
+			if(editTire > 0) {
+				ModMessages.sendToServer(new SepPacketC2S(editTire, stringToInt(num1.getValue()), stringToInt(num2.getValue()), stringToInt(num3.getValue())));
+			}
+			
+			editTire += editTire < 5 ? 1 : 0;
+		}
 		
-		ModMessages.sendToServer(new SepSenderC2S(stringToInt(num1.getValue())));
 	}
 	
 	public int stringToInt(String str) {

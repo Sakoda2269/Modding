@@ -26,40 +26,56 @@ import net.minecraftforge.items.ItemStackHandler;
 
 @SuppressWarnings("removal")
 public class GeneratorTile extends BlockEntity implements MenuProvider{
-	
-	protected final ContainerData data;
-	
 
-	private int sep11 = -1;
-	private int sep12 = 4;
-	private int sep13 = 3;
-	private int sep14 = 2;
-	private int sep15 = 1;
-	private int sep21 = 5;
-	private int sep22 = 4;
-	private int sep23 = 3;
-	private int sep24 = 2;
-	private int sep25 = 1;
-	private int sep31 = 5;
-	private int sep32 = 4;
-	private int sep33 = 3;
-	private int sep34 = 2;
-	private int sep35 = 1;
+	protected final ContainerData data;
+
+	private int[] sep1 = {5, 5, 5};
+	private int[] sep2 = {4, 4, 4};
+	private int[] sep3 = {3, 3, 3};
+	private int[] sep4 = {2, 2, 2};
+	private int[] sep5 = {1, 1, 1};
+
+	private int[] item1 = {1, 1, 1};
+	private int[] item2 = {1, 1, 1};
+	private int[] item3 = {1, 1, 1};
+	private int[] item4 = {1, 1, 1};
+	private int[] item5 = {1, 1, 1};
 	
+	private int[] itemCount1 = {1, 1, 1};
+	private int[] itemCount2 = {1, 1, 1};
+	private int[] itemCount3 = {1, 1, 1};
+	private int[] itemCount4 = {1, 1, 1};
+	private int[] itemCount5 = {1, 1, 1};
+	
+	private int[] updateItem = {1, 1, 1, 1, 1};
+	private int[] updateItemCount = {1, 1, 1, 1, 1};
+
+	//	private int sep11 = -1;
+	//	private int sep12 = 5;
+	//	private int sep13 = 5;
+
+	//	private int item11 = 1;
+	//	private int item12 = 1;
+	//	private int item13 = 1;
+
+	
+	private int editTire = 0;
+	private int tire = 0;
+
 	private int maxUpgrade = 5;
-	
-	
-	
+
+	public static final int EDIT_TIRE_INDEX = 56;
+
 	private final ItemStackHandler itemHandler = new ItemStackHandler(4) { //保有できるアイテムの数（カスタムスロット数）
 		@Override
 		protected void onContentsChanged(int slot) {
 			setChanged();
 		}
 	};
-	
+
 	private LazyOptional<IItemHandler> lazyItemHandler = LazyOptional.empty();
-	
-	
+
+
 	public GeneratorTile(BlockPos pos, BlockState state) {
 		super(TileEntityInit.GENERATOR.get(), pos, state);
 		this.data = new ContainerData() {//アイテム以外のデータを管理
@@ -67,22 +83,71 @@ public class GeneratorTile extends BlockEntity implements MenuProvider{
 			@Override
 			public int get(int index) {//データを取得
 				return switch(index) {
-				case 0 -> GeneratorTile.this.sep11;
-				case 1 -> GeneratorTile.this.sep12;
-				case 2 -> GeneratorTile.this.sep13;
-				case 3 -> GeneratorTile.this.sep14;
-				case 4 -> GeneratorTile.this.sep15;
-				case 5 -> GeneratorTile.this.sep21;
-				case 6 -> GeneratorTile.this.sep22;
-				case 7 -> GeneratorTile.this.sep23;
-				case 8 -> GeneratorTile.this.sep24;
-				case 9 -> GeneratorTile.this.sep25;
-				case 10 -> GeneratorTile.this.sep31;
-				case 11 -> GeneratorTile.this.sep32;
-				case 12 -> GeneratorTile.this.sep33;
-				case 13 -> GeneratorTile.this.sep34;
-				case 14 -> GeneratorTile.this.sep35;
-				case 15 -> GeneratorTile.this.maxUpgrade;
+				case 0 -> GeneratorTile.this.sep1[0];
+				case 1 -> GeneratorTile.this.sep1[1];
+				case 2 -> GeneratorTile.this.sep1[2];
+				case 3 -> GeneratorTile.this.sep2[0];
+				case 4 -> GeneratorTile.this.sep2[1];
+				case 5 -> GeneratorTile.this.sep2[2];
+				case 6 -> GeneratorTile.this.sep3[0];
+				case 7 -> GeneratorTile.this.sep3[1];
+				case 8 -> GeneratorTile.this.sep3[2];
+				case 9 -> GeneratorTile.this.sep4[0];
+				case 10 -> GeneratorTile.this.sep4[1];
+				case 11 -> GeneratorTile.this.sep4[2];
+				case 12 -> GeneratorTile.this.sep5[0];
+				case 13 -> GeneratorTile.this.sep5[1];
+				case 14 -> GeneratorTile.this.sep5[2];
+
+				case 15 -> GeneratorTile.this.item1[0];
+				case 16 -> GeneratorTile.this.item1[1];
+				case 17 -> GeneratorTile.this.item1[2];
+				case 18 -> GeneratorTile.this.item2[0];
+				case 19 -> GeneratorTile.this.item2[1];
+				case 20 -> GeneratorTile.this.item2[2];
+				case 21 -> GeneratorTile.this.item3[0];
+				case 22 -> GeneratorTile.this.item3[1];
+				case 23 -> GeneratorTile.this.item3[2];
+				case 24 -> GeneratorTile.this.item4[0];
+				case 25 -> GeneratorTile.this.item4[1];
+				case 26 -> GeneratorTile.this.item4[2];
+				case 27 -> GeneratorTile.this.item5[0];
+				case 28 -> GeneratorTile.this.item5[1];
+				case 29 -> GeneratorTile.this.item5[2];
+				
+				case 30 -> GeneratorTile.this.itemCount1[0];
+				case 31 -> GeneratorTile.this.itemCount1[1];
+				case 32 -> GeneratorTile.this.itemCount1[2];
+				case 33 -> GeneratorTile.this.itemCount2[0];
+				case 34 -> GeneratorTile.this.itemCount2[1];
+				case 35 -> GeneratorTile.this.itemCount2[2];
+				case 36 -> GeneratorTile.this.itemCount3[0];
+				case 37 -> GeneratorTile.this.itemCount3[1];
+				case 38 -> GeneratorTile.this.itemCount3[2];
+				case 39 -> GeneratorTile.this.itemCount4[0];
+				case 40 -> GeneratorTile.this.itemCount4[1];
+				case 41 -> GeneratorTile.this.itemCount4[2];
+				case 42 -> GeneratorTile.this.itemCount5[0];
+				case 43 -> GeneratorTile.this.itemCount5[1];
+				case 44 -> GeneratorTile.this.itemCount5[2];
+				
+				case 45 -> GeneratorTile.this.updateItem[0];
+				case 46 -> GeneratorTile.this.updateItem[1];
+				case 47 -> GeneratorTile.this.updateItem[2];
+				case 48 -> GeneratorTile.this.updateItem[3];
+				case 49 -> GeneratorTile.this.updateItem[4];
+				
+				case 50 -> GeneratorTile.this.updateItemCount[0];
+				case 51 -> GeneratorTile.this.updateItemCount[1];
+				case 52 -> GeneratorTile.this.updateItemCount[2];
+				case 53 -> GeneratorTile.this.updateItemCount[3];
+				case 54 -> GeneratorTile.this.updateItemCount[4];
+				
+				case 55 -> GeneratorTile.this.maxUpgrade;
+				case 56 -> GeneratorTile.this.editTire;
+				case 57 -> GeneratorTile.this.tire;
+				
+				
 				default -> 0;
 				};
 			}
@@ -90,41 +155,89 @@ public class GeneratorTile extends BlockEntity implements MenuProvider{
 			@Override
 			public void set(int index, int value) {//データを設定
 				switch (index) {
-				case 0 -> GeneratorTile.this.sep11 = value;
-				case 1 -> GeneratorTile.this.sep12 = value;
-				case 2 -> GeneratorTile.this.sep13 = value;
-				case 3 -> GeneratorTile.this.sep14 = value;
-				case 4 -> GeneratorTile.this.sep15 = value;
-				case 5 -> GeneratorTile.this.sep21 = value;
-				case 6 -> GeneratorTile.this.sep22 = value;
-				case 7 -> GeneratorTile.this.sep23 = value;
-				case 8 -> GeneratorTile.this.sep24 = value;
-				case 9 -> GeneratorTile.this.sep25 = value;
-				case 10 -> GeneratorTile.this.sep31 = value;
-				case 11 -> GeneratorTile.this.sep32 = value;
-				case 12 -> GeneratorTile.this.sep33 = value;
-				case 13 -> GeneratorTile.this.sep34 = value;
-				case 14 -> GeneratorTile.this.sep35 = value;
-				case 15 -> GeneratorTile.this.maxUpgrade = value;
+				case 0 -> GeneratorTile.this.sep1[0] = value;
+				case 1 -> GeneratorTile.this.sep1[1] = value;
+				case 2 -> GeneratorTile.this.sep1[2] = value;
+				case 3 -> GeneratorTile.this.sep2[0] = value;
+				case 4 -> GeneratorTile.this.sep2[1] = value;
+				case 5 -> GeneratorTile.this.sep2[2] = value;
+				case 6 -> GeneratorTile.this.sep3[0] = value;
+				case 7 -> GeneratorTile.this.sep3[1] = value;
+				case 8 -> GeneratorTile.this.sep3[2] = value;
+				case 9 -> GeneratorTile.this.sep4[0] = value;
+				case 10 -> GeneratorTile.this.sep4[1] = value;
+				case 11 -> GeneratorTile.this.sep4[2] = value;
+				case 12 -> GeneratorTile.this.sep5[0] = value;
+				case 13 -> GeneratorTile.this.sep5[1] = value;
+				case 14 -> GeneratorTile.this.sep5[2] = value;
+
+				case 15 -> GeneratorTile.this.item1[0] = value;
+				case 16 -> GeneratorTile.this.item1[1] = value;
+				case 17 -> GeneratorTile.this.item1[2] = value;
+				case 18 -> GeneratorTile.this.item2[0] = value;
+				case 19 -> GeneratorTile.this.item2[1] = value;
+				case 20 -> GeneratorTile.this.item2[2] = value;
+				case 21 -> GeneratorTile.this.item3[0] = value;
+				case 22 -> GeneratorTile.this.item3[1] = value;
+				case 23 -> GeneratorTile.this.item3[2] = value;
+				case 24 -> GeneratorTile.this.item4[0] = value;
+				case 25 -> GeneratorTile.this.item4[1] = value;
+				case 26 -> GeneratorTile.this.item4[2] = value;
+				case 27 -> GeneratorTile.this.item5[0] = value;
+				case 28 -> GeneratorTile.this.item5[1] = value;
+				case 29 -> GeneratorTile.this.item5[2] = value;
+
+				case 30 -> GeneratorTile.this.itemCount1[0] = value;
+				case 31 -> GeneratorTile.this.itemCount1[1] = value;
+				case 32 -> GeneratorTile.this.itemCount1[2] = value;
+				case 33 -> GeneratorTile.this.itemCount2[0] = value;
+				case 34 -> GeneratorTile.this.itemCount2[1] = value;
+				case 35 -> GeneratorTile.this.itemCount2[2] = value;
+				case 36 -> GeneratorTile.this.itemCount3[0] = value;
+				case 37 -> GeneratorTile.this.itemCount3[1] = value;
+				case 38 -> GeneratorTile.this.itemCount3[2] = value;
+				case 39 -> GeneratorTile.this.itemCount4[0] = value;
+				case 40 -> GeneratorTile.this.itemCount4[1] = value;
+				case 41 -> GeneratorTile.this.itemCount4[2] = value;
+				case 42 -> GeneratorTile.this.itemCount5[0] = value;
+				case 43 -> GeneratorTile.this.itemCount5[1] = value;
+				case 44 -> GeneratorTile.this.itemCount5[2] = value;
+				
+				case 45 -> GeneratorTile.this.updateItem[0] = value;
+				case 46 -> GeneratorTile.this.updateItem[1] = value;
+				case 47 -> GeneratorTile.this.updateItem[2] = value;
+				case 48 -> GeneratorTile.this.updateItem[3] = value;
+				case 49 -> GeneratorTile.this.updateItem[4] = value;
+				
+				case 50 -> GeneratorTile.this.updateItemCount[0] = value;
+				case 51 -> GeneratorTile.this.updateItemCount[1] = value;
+				case 52 -> GeneratorTile.this.updateItemCount[2] = value;
+				case 53 -> GeneratorTile.this.updateItemCount[3] = value;
+				case 54 -> GeneratorTile.this.updateItemCount[4] = value;
+				
+				case 55 -> GeneratorTile.this.maxUpgrade = value;
+				case 56 -> GeneratorTile.this.editTire = value;
+				case 57 -> GeneratorTile.this.tire = value;
+				
 				}
 			}
 
 			@Override
 			public int getCount() {//管理するデータの個数
-				return 16;
+				return 58;
 			}
-			
+
 		};
 	}
-	
-	
-	
+
+
+
 	@Override
 	public void onLoad() {//必要
 		super.onLoad();
 		lazyItemHandler = LazyOptional.of(() -> itemHandler);
 	}
-	
+
 	@Override
 	public void invalidateCaps() {//必要
 		super.invalidateCaps();
@@ -135,21 +248,68 @@ public class GeneratorTile extends BlockEntity implements MenuProvider{
 	public void load(CompoundTag nbt) {//スロットのアイテム情報の読み込み
 		super.load(nbt);
 
-		sep11 = nbt.getInt("sep11");
-		sep12 = nbt.getInt("sep12");
-		sep13 = nbt.getInt("sep13");
-		sep14 = nbt.getInt("sep14");
-		sep15 = nbt.getInt("sep15");
-		sep21 = nbt.getInt("sep21");
-		sep22 = nbt.getInt("sep22");
-		sep23 = nbt.getInt("sep23");
-		sep24 = nbt.getInt("sep24");
-		sep25 = nbt.getInt("sep25");
-		sep31 = nbt.getInt("sep31");
-		sep32 = nbt.getInt("sep32");
-		sep33 = nbt.getInt("sep33");
-		sep34 = nbt.getInt("sep34");
-		sep35 = nbt.getInt("sep35");
+		sep1[0] = nbt.getInt("sep10");
+		sep1[1] = nbt.getInt("sep11");
+		sep1[2] = nbt.getInt("sep12");
+		sep2[0] = nbt.getInt("sep20");
+		sep2[1] = nbt.getInt("sep21");
+		sep2[2] = nbt.getInt("sep22");
+		sep3[0] = nbt.getInt("sep30");
+		sep3[1] = nbt.getInt("sep31");
+		sep3[2] = nbt.getInt("sep32");
+		sep4[0] = nbt.getInt("sep40");
+		sep4[1] = nbt.getInt("sep41");
+		sep4[2] = nbt.getInt("sep42");
+		sep5[0] = nbt.getInt("sep50");
+		sep5[1] = nbt.getInt("sep51");
+		sep5[2] = nbt.getInt("sep52");
+		
+		item1[0] = nbt.getInt("item10");
+		item1[1] = nbt.getInt("item11");
+		item1[2] = nbt.getInt("item12");
+		item2[0] = nbt.getInt("item20");
+		item2[1] = nbt.getInt("item21");
+		item2[2] = nbt.getInt("item22");
+		item3[0] = nbt.getInt("item30");
+		item3[1] = nbt.getInt("item31");
+		item3[2] = nbt.getInt("item32");
+		item4[0] = nbt.getInt("item40");
+		item4[1] = nbt.getInt("item41");
+		item4[2] = nbt.getInt("item42");
+		item5[0] = nbt.getInt("item50");
+		item5[1] = nbt.getInt("item51");
+		item5[2] = nbt.getInt("item52");
+		
+		itemCount1[0] = nbt.getInt("itemCount10");
+		itemCount1[1] = nbt.getInt("itemCount11");
+		itemCount1[2] = nbt.getInt("itemCount12");
+		itemCount2[0] = nbt.getInt("itemCount20");
+		itemCount2[1] = nbt.getInt("itemCount21");
+		itemCount2[2] = nbt.getInt("itemCount22");
+		itemCount3[0] = nbt.getInt("itemCount30");
+		itemCount3[1] = nbt.getInt("itemCount31");
+		itemCount3[2] = nbt.getInt("itemCount32");
+		itemCount4[0] = nbt.getInt("itemCount40");
+		itemCount4[1] = nbt.getInt("itemCount41");
+		itemCount4[2] = nbt.getInt("itemCount42");
+		itemCount5[0] = nbt.getInt("itemCount50");
+		itemCount5[1] = nbt.getInt("itemCount51");
+		itemCount5[2] = nbt.getInt("itemCount52");
+		
+		updateItem[0] = nbt.getInt("updateItem0");
+		updateItem[1] = nbt.getInt("updateItem1");
+		updateItem[2] = nbt.getInt("updateItem2");
+		updateItem[3] = nbt.getInt("updateItem3");
+		updateItem[4] = nbt.getInt("updateItem4");
+		
+		updateItemCount[0] = nbt.getInt("updateItemCount0");
+		updateItemCount[1] = nbt.getInt("updateItemCount1");
+		updateItemCount[2] = nbt.getInt("updateItemCount2");
+		updateItemCount[3] = nbt.getInt("updateItemCount3");
+		updateItemCount[4] = nbt.getInt("updateItemCount4");
+		
+		editTire = nbt.getInt("editT");
+		tire = nbt.getInt("tire");
 		itemHandler.deserializeNBT(nbt.getCompound("inventory"));
 	}
 
@@ -157,26 +317,73 @@ public class GeneratorTile extends BlockEntity implements MenuProvider{
 	protected void saveAdditional(CompoundTag nbt) {//スロットのアイテム情報の保存
 		super.saveAdditional(nbt);
 
-		nbt.putInt("sep11", sep11);
-		nbt.putInt("sep12", sep12);
-		nbt.putInt("sep13", sep13);
-		nbt.putInt("sep14", sep14);
-		nbt.putInt("sep15", sep15);
-		nbt.putInt("sep21", sep21);
-		nbt.putInt("sep22", sep22);
-		nbt.putInt("sep23", sep23);
-		nbt.putInt("sep24", sep24);
-		nbt.putInt("sep25", sep25);
-		nbt.putInt("sep31", sep31);
-		nbt.putInt("sep32", sep32);
-		nbt.putInt("sep33", sep33);
-		nbt.putInt("sep34", sep34);
-		nbt.putInt("sep35", sep35);
+		nbt.putInt("sep10", sep1[0]);
+		nbt.putInt("sep11", sep1[1]);
+		nbt.putInt("sep12", sep1[2]);
+		nbt.putInt("sep20", sep2[0]);
+		nbt.putInt("sep21", sep2[1]);
+		nbt.putInt("sep22", sep2[2]);
+		nbt.putInt("sep30", sep3[0]);
+		nbt.putInt("sep31", sep3[1]);
+		nbt.putInt("sep32", sep3[2]);
+		nbt.putInt("sep40", sep4[0]);
+		nbt.putInt("sep41", sep4[1]);
+		nbt.putInt("sep42", sep4[2]);
+		nbt.putInt("sep50", sep5[0]);
+		nbt.putInt("sep51", sep5[1]);
+		nbt.putInt("sep52", sep5[2]);
+		
+		nbt.putInt("item10", item1[0]);
+		nbt.putInt("item11", item1[1]);
+		nbt.putInt("item12", item1[2]);
+		nbt.putInt("item20", item2[0]);
+		nbt.putInt("item21", item2[1]);
+		nbt.putInt("item22", item2[2]);
+		nbt.putInt("item30", item3[0]);
+		nbt.putInt("item31", item3[1]);
+		nbt.putInt("item32", item3[2]);
+		nbt.putInt("item40", item4[0]);
+		nbt.putInt("item41", item4[1]);
+		nbt.putInt("item42", item4[2]);
+		nbt.putInt("item50", item5[0]);
+		nbt.putInt("item51", item5[1]);
+		nbt.putInt("item52", item5[2]);
+		
+		nbt.putInt("itemCount10", itemCount1[0]);
+		nbt.putInt("itemCount11", itemCount1[1]);
+		nbt.putInt("itemCount12", itemCount1[2]);
+		nbt.putInt("itemCount20", itemCount2[0]);
+		nbt.putInt("itemCount21", itemCount2[1]);
+		nbt.putInt("itemCount22", itemCount2[2]);
+		nbt.putInt("itemCount30", itemCount3[0]);
+		nbt.putInt("itemCount31", itemCount3[1]);
+		nbt.putInt("itemCount32", itemCount3[2]);
+		nbt.putInt("itemCount40", itemCount4[0]);
+		nbt.putInt("itemCount41", itemCount4[1]);
+		nbt.putInt("itemCount42", itemCount4[2]);
+		nbt.putInt("itemCount50", itemCount5[0]);
+		nbt.putInt("itemCount51", itemCount5[1]);
+		nbt.putInt("itemCount52", itemCount5[2]);
+		
+		nbt.putInt("updateItem0", updateItem[0]);
+		nbt.putInt("updateItem1", updateItem[1]);
+		nbt.putInt("updateItem2", updateItem[2]);
+		nbt.putInt("updateItem3", updateItem[3]);
+		nbt.putInt("updateItem4", updateItem[4]);
+		
+		nbt.putInt("updateItemCount0", updateItemCount[0]);
+		nbt.putInt("updateItemCount1", updateItemCount[1]);
+		nbt.putInt("updateItemCount2", updateItemCount[2]);
+		nbt.putInt("updateItemCount3", updateItemCount[3]);
+		nbt.putInt("updateItemCount4", updateItemCount[4]);
+		
+		nbt.putInt("editTire", editTire);
+		nbt.putInt("tire", tire);
 		nbt.put("inventory", itemHandler.serializeNBT());
 	}
-	
-	
-	
+
+
+
 	public void drops() {//破壊された時の処理
 		SimpleContainer inventory = new SimpleContainer(itemHandler.getSlots());
 		for(int i = 0; i < itemHandler.getSlots(); i++) {
@@ -187,11 +394,11 @@ public class GeneratorTile extends BlockEntity implements MenuProvider{
 
 	@Override
 	public <T> @NotNull LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {//必要
-		
+
 		if(cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
 			return lazyItemHandler.cast();
 		}
-		
+
 		return super.getCapability(cap, side);
 	}
 
@@ -204,20 +411,20 @@ public class GeneratorTile extends BlockEntity implements MenuProvider{
 	public Component getDisplayName() {//guiに表示される名前
 		return Component.literal("Generator");
 	}
-	
-	
-	
+
+
+
 	public static void tick(Level world, BlockPos pos, BlockState state, GeneratorTile entity) {//1/20秒ごとに処理をする
 		if(world.isClientSide) {
 			return;
 		}
-		
+
 		setChanged(world, pos, state);
 	}
-	
+
 	public static void craftItem(GeneratorTile entity) {
-			//entity.itemHandler.extractItem(1, 1, false);
-			//entity.itemHandler.setStackInSlot(2, new ItemStack(Items.DIAMOND, entity.itemHandler.getStackInSlot(2).getCount() + 1));
+		//entity.itemHandler.extractItem(1, 1, false);
+		//entity.itemHandler.setStackInSlot(2, new ItemStack(Items.DIAMOND, entity.itemHandler.getStackInSlot(2).getCount() + 1));
 	}
 
 

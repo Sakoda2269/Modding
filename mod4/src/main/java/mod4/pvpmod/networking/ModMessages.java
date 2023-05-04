@@ -2,7 +2,8 @@ package mod4.pvpmod.networking;
 
 import mod4.pvpmod.PVPmod;
 import mod4.pvpmod.networking.packet.C2SPacket;
-import mod4.pvpmod.networking.packet.SepSenderC2S;
+import mod4.pvpmod.networking.packet.ItemPacketC2S;
+import mod4.pvpmod.networking.packet.SepPacketC2S;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkDirection;
@@ -30,11 +31,17 @@ public class ModMessages {
 		
 		INSTANCE = net;
 		
-		net.messageBuilder(SepSenderC2S.class, id(), NetworkDirection.PLAY_TO_SERVER)
-			.decoder(SepSenderC2S :: new)
-			.encoder(SepSenderC2S :: toBytes)
-			.consumerMainThread(SepSenderC2S :: handle)
+		net.messageBuilder(SepPacketC2S.class, id(), NetworkDirection.PLAY_TO_SERVER)
+			.decoder(SepPacketC2S :: new)
+			.encoder(SepPacketC2S :: toBytes)
+			.consumerMainThread(SepPacketC2S :: handle)
 			.add();
+		
+		net.messageBuilder(ItemPacketC2S.class, id(), NetworkDirection.PLAY_TO_SERVER)
+		.decoder(ItemPacketC2S :: new)
+		.encoder(ItemPacketC2S :: toBytes)
+		.consumerMainThread(ItemPacketC2S :: handle)
+		.add();
 		
 		net.messageBuilder(C2SPacket.class, id(), NetworkDirection.PLAY_TO_SERVER)
 			.decoder(C2SPacket :: new)

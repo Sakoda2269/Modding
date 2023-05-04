@@ -5,6 +5,7 @@
 	"item.pvpmod.jump_boots":"スーパーブーツ",
 	"block.pvpmod.smile_block":"スマイルブロック",
 	"gui.pvpmod.generator.activate":"起動",
-	"gui.pvpmod.generator.confirm_button":"決定",
+	"gui.pvpmod.generator.confirm_button":"次へ",
+	"gui.pvpmod.generator.back_button":"戻る",
 	"block.pvpmod.sample_block":"サンプルブロック"
 }
