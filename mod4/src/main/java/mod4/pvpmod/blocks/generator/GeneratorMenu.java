@@ -62,7 +62,10 @@ public class GeneratorMenu extends AbstractContainerMenu{
 	
 	@Override
 	public boolean clickMenuButton(Player player, int id) { //guiボタンをクリックしたときの処理
-		System.out.println(data.get(GeneratorTile.EDIT_TIRE_INDEX));
+		System.out.println("-------------------------------------");
+		for(int i = 0; i < 58; i++) {
+			System.out.println(data.get(i) + "," + i);
+		}
 		return super.clickMenuButton(player, id);
 	}
 

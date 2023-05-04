@@ -15,6 +15,7 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -425,6 +426,14 @@ public class GeneratorTile extends BlockEntity implements MenuProvider{
 	public static void craftItem(GeneratorTile entity) {
 		//entity.itemHandler.extractItem(1, 1, false);
 		//entity.itemHandler.setStackInSlot(2, new ItemStack(Items.DIAMOND, entity.itemHandler.getStackInSlot(2).getCount() + 1));
+	}
+	
+	public static void removeItem(GeneratorTile tile, int slotIndex) {
+		tile.itemHandler.extractItem(slotIndex - 36, tile.itemHandler.getStackInSlot(slotIndex - 36).getCount(), false);
+	}
+	
+	public static void insertItem(GeneratorTile tile, int slotIndex, ItemStack stack) {
+		tile.itemHandler.insertItem(slotIndex - 36, stack, false);
 	}
 
 

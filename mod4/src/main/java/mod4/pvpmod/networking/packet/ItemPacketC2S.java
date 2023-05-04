@@ -4,6 +4,7 @@ package mod4.pvpmod.networking.packet;
 import java.util.function.Supplier;
 
 import mod4.pvpmod.blocks.generator.GeneratorMenu;
+import mod4.pvpmod.blocks.generator.GeneratorTile;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.Item;
@@ -49,6 +50,11 @@ public class ItemPacketC2S {
 			//サーバーサイドで実行される
 			ServerPlayer player = context.getSender();
 			GeneratorMenu gm = (GeneratorMenu)player.containerMenu;
+			GeneratorTile.removeItem(gm.be, 39);
+			GeneratorTile.removeItem(gm.be, 38);
+			GeneratorTile.removeItem(gm.be, 37);
+			GeneratorTile.removeItem(gm.be, 36);
+			System.out.println("--------------------save" + tire);
 			switch(tire) {
 			case 0:
 				gm.data.set(45, Item.getId(update.getItem()));

@@ -2,6 +2,7 @@ package mod4.pvpmod.networking;
 
 import mod4.pvpmod.PVPmod;
 import mod4.pvpmod.networking.packet.C2SPacket;
+import mod4.pvpmod.networking.packet.InsertItemPacketC2S;
 import mod4.pvpmod.networking.packet.ItemPacketC2S;
 import mod4.pvpmod.networking.packet.SepPacketC2S;
 import net.minecraft.resources.ResourceLocation;
@@ -30,6 +31,12 @@ public class ModMessages {
 				.simpleChannel();
 		
 		INSTANCE = net;
+		
+		net.messageBuilder(InsertItemPacketC2S.class, id(), NetworkDirection.PLAY_TO_SERVER)
+			.decoder(InsertItemPacketC2S :: new)
+			.encoder(InsertItemPacketC2S :: toBytes)
+			.consumerMainThread(InsertItemPacketC2S :: handle)
+			.add();
 		
 		net.messageBuilder(SepPacketC2S.class, id(), NetworkDirection.PLAY_TO_SERVER)
 			.decoder(SepPacketC2S :: new)

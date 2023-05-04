@@ -7,6 +7,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 
 import mod4.pvpmod.PVPmod;
 import mod4.pvpmod.networking.ModMessages;
+import mod4.pvpmod.networking.packet.InsertItemPacketC2S;
 import mod4.pvpmod.networking.packet.ItemPacketC2S;
 import mod4.pvpmod.networking.packet.SepPacketC2S;
 import net.minecraft.client.Minecraft;
@@ -197,18 +198,23 @@ public class GeneratorScreen extends AbstractContainerScreen<GeneratorMenu> impl
 	@SuppressWarnings("resource")
 	@Override
 	public void onPress(Button btn) {
+		Minecraft.getInstance().gameMode.handleInventoryButtonClick(this.menu.containerId, 0);
+		System.out.println("saveTire: " + editTire);
 		if(btn.equals(confirm)) {
-			Minecraft.getInstance().gameMode.handleInventoryButtonClick(this.menu.containerId, 0);
-			System.out.println(menu.getSlot(0).getItem().getItem());
-
 			ModMessages.sendToServer(new ItemPacketC2S(editTire, menu.getSlot(36).getItem(), menu.getSlot(37).getItem(), menu.getSlot(38).getItem(), menu.getSlot(39).getItem()));
 			if(editTire > 0) {
 				ModMessages.sendToServer(new SepPacketC2S(editTire, stringToInt(num1.getValue()), stringToInt(num2.getValue()), stringToInt(num3.getValue())));
 			}
-			
 			editTire += editTire < 5 ? 1 : 0;
+		} else if(btn.equals(back)) {
+			ModMessages.sendToServer(new ItemPacketC2S(editTire, menu.getSlot(36).getItem(), menu.getSlot(37).getItem(), menu.getSlot(38).getItem(), menu.getSlot(39).getItem()));
+			if(editTire > 0) {
+				ModMessages.sendToServer(new SepPacketC2S(editTire, stringToInt(num1.getValue()), stringToInt(num2.getValue()), stringToInt(num3.getValue())));
+			}
+			editTire -= editTire > 0 ? 1 : 0;
 		}
-		
+		System.out.println("loadTire:" + editTire);
+		ModMessages.sendToServer(new InsertItemPacketC2S(editTire));
 	}
 	
 	public int stringToInt(String str) {
