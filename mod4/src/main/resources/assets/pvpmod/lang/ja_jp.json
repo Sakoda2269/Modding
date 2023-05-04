@@ -7,5 +7,7 @@
 	"gui.pvpmod.generator.activate":"起動",
 	"gui.pvpmod.generator.confirm_button":"次へ",
 	"gui.pvpmod.generator.back_button":"戻る",
+	"block.pvpmod.generator_block.activate":"Shift+右クリックでジェネレーターを起動!",
+	"block.pvpmod.generator_block.can_upgrade_free":"Shift+右クリックでアップグレード!",
 	"block.pvpmod.sample_block":"サンプルブロック"
 }

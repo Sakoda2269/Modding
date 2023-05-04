@@ -11,10 +11,12 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.Containers;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.SimpleContainer;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -36,20 +38,22 @@ public class GeneratorTile extends BlockEntity implements MenuProvider{
 	private int[] sep4 = {2, 2, 2};
 	private int[] sep5 = {1, 1, 1};
 
-	private int[] item1 = {1, 1, 1};
-	private int[] item2 = {1, 1, 1};
-	private int[] item3 = {1, 1, 1};
-	private int[] item4 = {1, 1, 1};
-	private int[] item5 = {1, 1, 1};
+	private int[] item1 = {0, 0, 0};
+	private int[] item2 = {0, 0, 0};
+	private int[] item3 = {0, 0, 0};
+	private int[] item4 = {0, 0, 0};
+	private int[] item5 = {0, 0, 0};
 	
-	private int[] itemCount1 = {1, 1, 1};
-	private int[] itemCount2 = {1, 1, 1};
-	private int[] itemCount3 = {1, 1, 1};
-	private int[] itemCount4 = {1, 1, 1};
-	private int[] itemCount5 = {1, 1, 1};
+	private int[] itemCount1 = {0, 0, 0};
+	private int[] itemCount2 = {0, 0, 0};
+	private int[] itemCount3 = {0, 0, 0};
+	private int[] itemCount4 = {0, 0, 0};
+	private int[] itemCount5 = {0, 0, 0};
 	
-	private int[] updateItem = {1, 1, 1, 1, 1};
-	private int[] updateItemCount = {1, 1, 1, 1, 1};
+	private int[] updateItem = {0, 0, 0, 0, 0};
+	private int[] updateItemCount = {0, 0, 0, 0, 0};
+	
+	private int progress = 0;
 
 	//	private int sep11 = -1;
 	//	private int sep12 = 5;
@@ -66,6 +70,9 @@ public class GeneratorTile extends BlockEntity implements MenuProvider{
 	private int maxUpgrade = 5;
 
 	public static final int EDIT_TIRE_INDEX = 56;
+	public static final int TIRE_INDEX = 57;
+	public static final int MAXUPGRADE_INDEX = 55;
+	public static final int PROGRESS_INDEX = 58;
 
 	private final ItemStackHandler itemHandler = new ItemStackHandler(4) { //保有できるアイテムの数（カスタムスロット数）
 		@Override
@@ -147,7 +154,7 @@ public class GeneratorTile extends BlockEntity implements MenuProvider{
 				case 55 -> GeneratorTile.this.maxUpgrade;
 				case 56 -> GeneratorTile.this.editTire;
 				case 57 -> GeneratorTile.this.tire;
-				
+				case 58-> GeneratorTile.this.progress;
 				
 				default -> 0;
 				};
@@ -219,13 +226,14 @@ public class GeneratorTile extends BlockEntity implements MenuProvider{
 				case 55 -> GeneratorTile.this.maxUpgrade = value;
 				case 56 -> GeneratorTile.this.editTire = value;
 				case 57 -> GeneratorTile.this.tire = value;
+				case 58-> GeneratorTile.this.progress = value;
 				
 				}
 			}
 
 			@Override
 			public int getCount() {//管理するデータの個数
-				return 58;
+				return 59;
 			}
 
 		};
@@ -311,6 +319,7 @@ public class GeneratorTile extends BlockEntity implements MenuProvider{
 		
 		editTire = nbt.getInt("editT");
 		tire = nbt.getInt("tire");
+		progress = nbt.getInt("progress");
 		itemHandler.deserializeNBT(nbt.getCompound("inventory"));
 	}
 
@@ -380,6 +389,7 @@ public class GeneratorTile extends BlockEntity implements MenuProvider{
 		
 		nbt.putInt("editTire", editTire);
 		nbt.putInt("tire", tire);
+		nbt.putInt("progress", progress);
 		nbt.put("inventory", itemHandler.serializeNBT());
 	}
 
@@ -406,6 +416,7 @@ public class GeneratorTile extends BlockEntity implements MenuProvider{
 	@Override
 	public AbstractContainerMenu createMenu(int id, Inventory inventory, Player player) {//Menuを紐づける
 		return new GeneratorMenu(id, inventory, this, this.data);
+		
 	}
 
 	@Override
@@ -413,14 +424,31 @@ public class GeneratorTile extends BlockEntity implements MenuProvider{
 		return Component.literal("Generator");
 	}
 
-
-
 	public static void tick(Level world, BlockPos pos, BlockState state, GeneratorTile entity) {//1/20秒ごとに処理をする
 		if(world.isClientSide) {
 			return;
 		}
-
+		int tire = entity.data.get(TIRE_INDEX);
+		int progress = entity.data.get(PROGRESS_INDEX);
+		if(tire > 0) {
+			if(progress % (entity.data.get(0 + (tire - 1) * 3) * 20) == 0) {
+				world.addFreshEntity(new ItemEntity(world, pos.getX(), pos.getY() + 1, pos.getZ(), new ItemStack(Item.byId(entity.data.get(15 + (tire - 1) * 3)), entity.data.get(30 + (tire - 1) * 3))));
+			}
+			if(progress % (entity.data.get(1 + (tire - 1) * 3) * 20) == 0){
+				world.addFreshEntity(new ItemEntity(world, pos.getX(), pos.getY() + 1, pos.getZ(), new ItemStack(Item.byId(entity.data.get(16 + (tire - 1) * 3)), entity.data.get(31 + (tire - 1) * 3))));
+			}
+			if(progress % (entity.data.get(2 + (tire - 1) * 3) * 20) == 0){
+				world.addFreshEntity(new ItemEntity(world, pos.getX(), pos.getY() + 1, pos.getZ(), new ItemStack(Item.byId(entity.data.get(17 + (tire - 1) * 3)), entity.data.get(32 + (tire - 1) * 3))));
+			}	
+			if(progress >=(entity.data.get(1 + (tire - 1) * 3) * 20) * (entity.data.get(1 + (tire - 1) * 3) * 20) * (entity.data.get(2 + (tire - 1) * 3) * 20)){
+				entity.data.set(PROGRESS_INDEX, 0);
+			}else {
+				entity.data.set(PROGRESS_INDEX, progress + 1);
+			}
+			
+		}
 		setChanged(world, pos, state);
+		
 	}
 
 	public static void craftItem(GeneratorTile entity) {

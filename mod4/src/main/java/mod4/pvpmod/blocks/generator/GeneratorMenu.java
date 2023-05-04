@@ -34,7 +34,7 @@ public class GeneratorMenu extends AbstractContainerMenu{
 	private static final int TE_INVENTORY_SLOT_COUNT = 4;//GeneratorTileのitemHandlerの値と同じにする
 	
 	public GeneratorMenu(int id, Inventory inv, FriendlyByteBuf extraData) {
-		this(id, inv, inv.player.level.getBlockEntity(extraData.readBlockPos()), new SimpleContainerData(58));//GeneratorTileのコンストラクターのgetCount()の値と同じにする
+		this(id, inv, inv.player.level.getBlockEntity(extraData.readBlockPos()), new SimpleContainerData(59));//GeneratorTileのコンストラクターのgetCount()の値と同じにする
 	}
 
 	public GeneratorMenu(int id, Inventory inv, BlockEntity entity, ContainerData data) {
@@ -43,8 +43,6 @@ public class GeneratorMenu extends AbstractContainerMenu{
 		be = (GeneratorTile) entity;
 		this.level = inv.player.level;
 		this.data= data;
-		
-		data.set(0, 1);
 		
 		addPlayerInventory(inv);//guiにプレイヤーのインベントリも表示する
 		addPlayerHotbar(inv);//guiにプレイヤーのホットバーも表示する
@@ -62,10 +60,10 @@ public class GeneratorMenu extends AbstractContainerMenu{
 	
 	@Override
 	public boolean clickMenuButton(Player player, int id) { //guiボタンをクリックしたときの処理
-		System.out.println("-------------------------------------");
-		for(int i = 0; i < 58; i++) {
-			System.out.println(data.get(i) + "," + i);
-		}
+//		System.out.println("-------------------------------------");
+//		for(int i = 0; i < 58; i++) {
+//			System.out.println(data.get(i) + "," + i);
+//		}
 		return super.clickMenuButton(player, id);
 	}
 

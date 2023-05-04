@@ -192,6 +192,10 @@ public class GeneratorScreen extends AbstractContainerScreen<GeneratorMenu> impl
 	@Override
 	public void onClose() {
 		opened = false;
+		ModMessages.sendToServer(new ItemPacketC2S(editTire, menu.getSlot(36).getItem(), menu.getSlot(37).getItem(), menu.getSlot(38).getItem(), menu.getSlot(39).getItem()));
+		if(editTire > 0) {
+			ModMessages.sendToServer(new SepPacketC2S(editTire, stringToInt(num1.getValue()), stringToInt(num2.getValue()), stringToInt(num3.getValue())));
+		}
 		super.onClose();
 	}
 	
@@ -216,6 +220,8 @@ public class GeneratorScreen extends AbstractContainerScreen<GeneratorMenu> impl
 		System.out.println("loadTire:" + editTire);
 		ModMessages.sendToServer(new InsertItemPacketC2S(editTire));
 	}
+	
+	
 	
 	public int stringToInt(String str) {
 		if(str.length() == 0) {

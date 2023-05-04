@@ -49,28 +49,28 @@ public class SepPacketC2S {
 				break;
 			case 1:
 				menu.data.set(0, num1);
-				menu.data.set(1, num1);
-				menu.data.set(2, num1);
+				menu.data.set(1, num2);
+				menu.data.set(2, num3);
 				break;
 			case 2:
 				menu.data.set(3, num1);
-				menu.data.set(4, num1);
-				menu.data.set(5, num1);
+				menu.data.set(4, num2);
+				menu.data.set(5, num3);
 				break;
 			case 3:
 				menu.data.set(6, num1);
-				menu.data.set(7, num1);
-				menu.data.set(8, num1);
+				menu.data.set(7, num2);
+				menu.data.set(8, num3);
 				break;
 			case 4:
 				menu.data.set(9, num1);
-				menu.data.set(10, num1);
-				menu.data.set(11, num1);
+				menu.data.set(10, num2);
+				menu.data.set(11, num3);
 				break;
 			case 5:
 				menu.data.set(12, num1);
-				menu.data.set(13, num1);
-				menu.data.set(14, num1);
+				menu.data.set(13, num2);
+				menu.data.set(14, num3);
 				break;
 			}
 			
