@@ -5,6 +5,7 @@
 	"item.pvpmod.jump_boots":"スーパーブーツ",
 	"block.pvpmod.smile_block":"スマイルブロック",
 	"gui.pvpmod.generator.activate":"起動",
+	"gui.pvpmod.generator.upgread":"アップグレード",
 	"gui.pvpmod.generator.confirm_button":"次へ",
 	"gui.pvpmod.generator.back_button":"戻る",
 	"block.pvpmod.generator_block.activate":"Shift+右クリックでジェネレーターを起動!",

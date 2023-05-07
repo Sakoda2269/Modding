@@ -391,6 +391,8 @@ public class GeneratorTile extends BlockEntity implements MenuProvider{
 		nbt.putInt("tire", tire);
 		nbt.putInt("progress", progress);
 		nbt.put("inventory", itemHandler.serializeNBT());
+		
+
 	}
 
 
@@ -432,13 +434,13 @@ public class GeneratorTile extends BlockEntity implements MenuProvider{
 		int progress = entity.data.get(PROGRESS_INDEX);
 		if(tire > 0) {
 			if(progress % (entity.data.get(0 + (tire - 1) * 3) * 20) == 0) {
-				world.addFreshEntity(new ItemEntity(world, pos.getX(), pos.getY() + 1, pos.getZ(), new ItemStack(Item.byId(entity.data.get(15 + (tire - 1) * 3)), entity.data.get(30 + (tire - 1) * 3))));
+				world.addFreshEntity(new ItemEntity(world, pos.getX() + 0.5f, pos.getY() + 1, pos.getZ() + 0.5f, new ItemStack(Item.byId(entity.data.get(15 + (tire - 1) * 3)), entity.data.get(30 + (tire - 1) * 3))));
 			}
 			if(progress % (entity.data.get(1 + (tire - 1) * 3) * 20) == 0){
-				world.addFreshEntity(new ItemEntity(world, pos.getX(), pos.getY() + 1, pos.getZ(), new ItemStack(Item.byId(entity.data.get(16 + (tire - 1) * 3)), entity.data.get(31 + (tire - 1) * 3))));
+				world.addFreshEntity(new ItemEntity(world, pos.getX() + 0.5f, pos.getY() + 1, pos.getZ() + 0.5f, new ItemStack(Item.byId(entity.data.get(16 + (tire - 1) * 3)), entity.data.get(31 + (tire - 1) * 3))));
 			}
 			if(progress % (entity.data.get(2 + (tire - 1) * 3) * 20) == 0){
-				world.addFreshEntity(new ItemEntity(world, pos.getX(), pos.getY() + 1, pos.getZ(), new ItemStack(Item.byId(entity.data.get(17 + (tire - 1) * 3)), entity.data.get(32 + (tire - 1) * 3))));
+				world.addFreshEntity(new ItemEntity(world, pos.getX() + 0.5f, pos.getY() + 1, pos.getZ() + 0.5f, new ItemStack(Item.byId(entity.data.get(17 + (tire - 1) * 3)), entity.data.get(32 + (tire - 1) * 3))));
 			}	
 			if(progress >=(entity.data.get(1 + (tire - 1) * 3) * 20) * (entity.data.get(1 + (tire - 1) * 3) * 20) * (entity.data.get(2 + (tire - 1) * 3) * 20)){
 				entity.data.set(PROGRESS_INDEX, 0);
@@ -450,14 +452,10 @@ public class GeneratorTile extends BlockEntity implements MenuProvider{
 		setChanged(world, pos, state);
 		
 	}
-
-	public static void craftItem(GeneratorTile entity) {
-		//entity.itemHandler.extractItem(1, 1, false);
-		//entity.itemHandler.setStackInSlot(2, new ItemStack(Items.DIAMOND, entity.itemHandler.getStackInSlot(2).getCount() + 1));
-	}
 	
 	public static void removeItem(GeneratorTile tile, int slotIndex) {
 		tile.itemHandler.extractItem(slotIndex - 36, tile.itemHandler.getStackInSlot(slotIndex - 36).getCount(), false);
+	
 	}
 	
 	public static void insertItem(GeneratorTile tile, int slotIndex, ItemStack stack) {

@@ -13,8 +13,6 @@ import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraftforge.items.CapabilityItemHandler;
-import net.minecraftforge.items.SlotItemHandler;
 
 @SuppressWarnings("removal")
 public class GeneratorMenu extends AbstractContainerMenu{
@@ -22,6 +20,11 @@ public class GeneratorMenu extends AbstractContainerMenu{
 	public final GeneratorTile be;
 	public final Level level;
 	public final ContainerData data;
+	
+	public ItemSlot slot1;
+	public ItemSlot slot2;
+	public ItemSlot slot3;
+	public ItemSlot slot4;
 	
 	private static final int HOTBAR_SLOT_COUNT = 9;
 	private static final int PLAYER_INVENTORY_ROW_COUNT = 3;
@@ -47,16 +50,32 @@ public class GeneratorMenu extends AbstractContainerMenu{
 		addPlayerInventory(inv);//guiにプレイヤーのインベントリも表示する
 		addPlayerHotbar(inv);//guiにプレイヤーのホットバーも表示する
 		
-		this.be.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(hendler -> {
-			this.addSlot(new SlotItemHandler(hendler, 0, 10, 30));//index = 0,x = 12, y = 15にスロットを追加
-			this.addSlot(new SlotItemHandler(hendler, 1, 10, 60));
-			this.addSlot(new SlotItemHandler(hendler, 2, 10, 90));
-			this.addSlot(new SlotItemHandler(hendler, 3, 85, 60));
-		});
+		slot1 = new ItemSlot(inv, 36, 10, 30, 0);
+		this.addSlot(slot1);
+		
+		slot2 = new ItemSlot(inv, 37, 10, 60, 0);
+		this.addSlot(slot2);
+		
+		slot3 = new ItemSlot(inv, 38, 10, 90, 0);
+		this.addSlot(slot3);
+		
+		slot4 = new ItemSlot(inv, 39, 85, 60, 5);
+		this.addSlot(slot4);
+		
+		
+//		this.be.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(handler -> {
+//			//this.addSlot(new SlotItemHandler(handler, 0, 10, 30));//index = 0,x = 12, y = 15にスロットを追加
+//			this.addSlot(new SlotItemHandler(handler, 1, 10, 60));
+//			this.addSlot(new SlotItemHandler(handler, 2, 10, 90));
+//			this.addSlot(new SlotItemHandler(handler, 3, 85, 60));
+//		});
+		
 		
 		addDataSlots(data);//アイテム以外のデータを管理
 		
 	}
+	
+	
 	
 	@Override
 	public boolean clickMenuButton(Player player, int id) { //guiボタンをクリックしたときの処理
@@ -64,6 +83,7 @@ public class GeneratorMenu extends AbstractContainerMenu{
 //		for(int i = 0; i < 58; i++) {
 //			System.out.println(data.get(i) + "," + i);
 //		}
+		
 		return super.clickMenuButton(player, id);
 	}
 

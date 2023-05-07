@@ -2,6 +2,8 @@ package mod4.pvpmod.blocks.generator;
 
 import java.util.function.Predicate;
 
+import org.jetbrains.annotations.Nullable;
+
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 
@@ -19,6 +21,7 @@ import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.Slot;
 
 public class GeneratorScreen extends AbstractContainerScreen<GeneratorMenu> implements OnPress{
 
@@ -75,11 +78,67 @@ public class GeneratorScreen extends AbstractContainerScreen<GeneratorMenu> impl
 		
 		this.addRenderableWidget(confirm);
 		this.addRenderableWidget(back);
+		ModMessages.sendToServer(new InsertItemPacketC2S(editTire));
+		
+		if(editTire > 0) {
+			num1.setValue(String.valueOf(menu.data.get(0 + (editTire - 1) * 3)));
+			num2.setValue(String.valueOf(menu.data.get(1 + (editTire - 1) * 3)));
+			num3.setValue(String.valueOf(menu.data.get(2 + (editTire - 1) * 3)));
+		}
 		
 		//this.setInitialFocus(num1);
 		//rebuildWidgets();
 	}
 	
+	
+	
+
+
+	@Override
+	public @Nullable Slot getSlotUnderMouse() {
+		if(editTire == 0) {
+			return null;
+		}
+		return super.getSlotUnderMouse();
+	}
+
+	
+
+	@Override
+	public boolean mouseClicked(double x, double y, int p_97750_) {
+		if(editTire == 0) {
+			if(x >= leftPos + 9 && x <= leftPos + 27) {
+				if(y >= topPos + 29 && y <= topPos + 47) {
+					return false;
+				}
+				if(y >= topPos + 59 && y <= topPos + 77) {
+					return false;
+				}
+				if(y >= topPos + 89 && y <= topPos + 107) {
+					return false;
+				}
+			}
+		}
+		if(editTire == 5) {
+			if(x >= 84 && x <= 102) {
+				if(y >= 59 && y <= 77) {
+					return false;
+				}
+			}
+		}
+		return super.mouseClicked(x, y, p_97750_);
+	}
+
+	@Override
+	public int getSlotColor(int index) {
+		if(editTire == 0 && (index == 36 || index == 37 || index == 38)) {
+			return 0xc6c6c6;
+		} else if(editTire == 5 && index == 39) {
+			return 0xc6c6c6;
+		}
+		return super.getSlotColor(index);
+	}
+
 	private boolean checker(String str) {//入力が数字で100以下か、何もなければtrue
 		boolean isNum = true;
 		if(str.length() == 0) {
@@ -110,6 +169,16 @@ public class GeneratorScreen extends AbstractContainerScreen<GeneratorMenu> impl
 		int y = (height - imageHeight) / 2;
 		
 		this.blit(stack, x, y, 0, 0, imageWidth, imageHeight);
+		
+		if(editTire > 0) {
+			this.blit(stack, this.leftPos + 9, this.topPos + 29, 35, 142, 17, 17);
+			this.blit(stack, this.leftPos + 9, this.topPos + 59, 35, 142, 17, 17);
+			this.blit(stack, this.leftPos + 9, this.topPos + 89, 35, 142, 17, 17);
+		}
+		if(editTire < 5) {
+			this.blit(stack, this.leftPos + 84, this.topPos + 59, 35, 142, 17, 17);
+		}
+		
 		//this.rebuildWidgets();
 		
 //		num1.setFocus(true);
@@ -124,9 +193,21 @@ public class GeneratorScreen extends AbstractContainerScreen<GeneratorMenu> impl
 		if(editTire == 0) {
 			back.visible = false;
 			back.active = false;
+			num1.setEditable(false);
+			num2.setEditable(false);
+			num3.setEditable(false);
+			num1.visible = false;
+			num2.visible = false;
+			num3.visible = false;
 		}else {
 			back.visible = true;
 			back.active = true;
+			num1.setEditable(true);
+			num2.setEditable(true);
+			num3.setEditable(true);
+			num1.visible = true;
+			num2.visible = true;
+			num3.visible = true;
 		}
 		if(editTire == 5) {
 			confirm.visible = false;
@@ -142,16 +223,22 @@ public class GeneratorScreen extends AbstractContainerScreen<GeneratorMenu> impl
 	protected void renderLabels(PoseStack poseStack, int p1, int p2) {
 		super.renderLabels(poseStack, p1, p2);
 		
-		this.font.draw(poseStack, Component.literal("per"), 32, 35, 4210752);
-		this.font.draw(poseStack, Component.literal("s"), 73, 39, 4210752);
-		
-		this.font.draw(poseStack, Component.literal("per"), 32, 65, 4210752);
-		this.font.draw(poseStack, Component.literal("s"), 73, 69, 4210752);
-		
-		this.font.draw(poseStack, Component.literal("per"), 32, 95, 4210752);
-		this.font.draw(poseStack, Component.literal("s"), 73, 99, 4210752);
-		
-		this.font.draw(poseStack, Component.translatable("gui." + PVPmod.MOD_ID + ".generator.activate"), 110, 65, 4210752);
+		if(editTire > 0) {
+			this.font.draw(poseStack, Component.literal("per"), 32, 35, 4210752);
+			this.font.draw(poseStack, Component.literal("s"), 73, 39, 4210752);
+			
+			this.font.draw(poseStack, Component.literal("per"), 32, 65, 4210752);
+			this.font.draw(poseStack, Component.literal("s"), 73, 69, 4210752);
+			
+			this.font.draw(poseStack, Component.literal("per"), 32, 95, 4210752);
+			this.font.draw(poseStack, Component.literal("s"), 73, 99, 4210752);
+		}
+		if(editTire == 0) {
+			this.font.draw(poseStack, Component.translatable("gui." + PVPmod.MOD_ID + ".generator.activate"), 110, 65, 4210752);
+		}
+		else if(editTire < 5) {
+			this.font.draw(poseStack, Component.translatable("gui." + PVPmod.MOD_ID + ".generator.upgread"), 110, 65, 4210752);
+		}
 		
 		this.font.draw(poseStack, Component.literal("Tire" + editTire), 100, 15, 4210752);
 	}
@@ -203,21 +290,22 @@ public class GeneratorScreen extends AbstractContainerScreen<GeneratorMenu> impl
 	@Override
 	public void onPress(Button btn) {
 		Minecraft.getInstance().gameMode.handleInventoryButtonClick(this.menu.containerId, 0);
-		System.out.println("saveTire: " + editTire);
+		ModMessages.sendToServer(new ItemPacketC2S(editTire, menu.getSlot(36).getItem(), menu.getSlot(37).getItem(), menu.getSlot(38).getItem(), menu.getSlot(39).getItem()));
+		if(editTire > 0) {
+			ModMessages.sendToServer(new SepPacketC2S(editTire, stringToInt(num1.getValue()), stringToInt(num2.getValue()), stringToInt(num3.getValue())));
+			
+		}
+		
 		if(btn.equals(confirm)) {
-			ModMessages.sendToServer(new ItemPacketC2S(editTire, menu.getSlot(36).getItem(), menu.getSlot(37).getItem(), menu.getSlot(38).getItem(), menu.getSlot(39).getItem()));
-			if(editTire > 0) {
-				ModMessages.sendToServer(new SepPacketC2S(editTire, stringToInt(num1.getValue()), stringToInt(num2.getValue()), stringToInt(num3.getValue())));
-			}
 			editTire += editTire < 5 ? 1 : 0;
 		} else if(btn.equals(back)) {
-			ModMessages.sendToServer(new ItemPacketC2S(editTire, menu.getSlot(36).getItem(), menu.getSlot(37).getItem(), menu.getSlot(38).getItem(), menu.getSlot(39).getItem()));
-			if(editTire > 0) {
-				ModMessages.sendToServer(new SepPacketC2S(editTire, stringToInt(num1.getValue()), stringToInt(num2.getValue()), stringToInt(num3.getValue())));
-			}
 			editTire -= editTire > 0 ? 1 : 0;
 		}
-		System.out.println("loadTire:" + editTire);
+		if(editTire > 0) {
+			num1.setValue(String.valueOf(menu.data.get(0 + (editTire - 1) * 3)));
+			num2.setValue(String.valueOf(menu.data.get(1 + (editTire - 1) * 3)));
+			num3.setValue(String.valueOf(menu.data.get(2 + (editTire - 1) * 3)));
+		}
 		ModMessages.sendToServer(new InsertItemPacketC2S(editTire));
 	}
 	
