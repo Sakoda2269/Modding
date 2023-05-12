@@ -2,8 +2,6 @@ package mod4.pvpmod.blocks.generator;
 
 import java.util.function.Predicate;
 
-import org.jetbrains.annotations.Nullable;
-
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 
@@ -21,6 +19,7 @@ import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.ClickType;
 import net.minecraft.world.inventory.Slot;
 
 public class GeneratorScreen extends AbstractContainerScreen<GeneratorMenu> implements OnPress{
@@ -88,18 +87,6 @@ public class GeneratorScreen extends AbstractContainerScreen<GeneratorMenu> impl
 		
 		//this.setInitialFocus(num1);
 		//rebuildWidgets();
-	}
-	
-	
-	
-
-
-	@Override
-	public @Nullable Slot getSlotUnderMouse() {
-		if(editTire == 0) {
-			return null;
-		}
-		return super.getSlotUnderMouse();
 	}
 
 	
@@ -243,19 +230,6 @@ public class GeneratorScreen extends AbstractContainerScreen<GeneratorMenu> impl
 		this.font.draw(poseStack, Component.literal("Tire" + editTire), 100, 15, 4210752);
 	}
 
-	@Override
-	public boolean keyPressed(int p1, int p2, int p3) {
-		System.out.println(p1 + "," + p2 + "," + p3);
-		if((p1 == 256 && p2 == 1) || (p1 == 259 && p2 == 14)) {//escキーで画面を閉じる、バックスペースを有効
-			return super.keyPressed(p1, p2, p3);
-		}
-		else if(num1.isFocused() || num2.isFocused() || num3.isFocused()) {//入力中はeキーでguiを閉じないようにする
-			return false;
-		}
-		//return super.keyPressed(0, 0, 0);
-		return super.keyPressed(p1, p2, p3);
-	}
-	
 	private boolean opened = false;
 
 	@Override
@@ -276,10 +250,24 @@ public class GeneratorScreen extends AbstractContainerScreen<GeneratorMenu> impl
 		num3.tick();
 	}
 	
+	
+	
+	@Override
+	protected void slotClicked(Slot slot, int p_97779_, int p_97780_, ClickType p_97781_) {
+		if(slot != null) {
+			System.out.println(slot.getSlotIndex());
+		}
+		super.slotClicked(slot, p_97779_, p_97780_, p_97781_);
+	}
+
 	@Override
 	public void onClose() {
 		opened = false;
-		ModMessages.sendToServer(new ItemPacketC2S(editTire, menu.getSlot(36).getItem(), menu.getSlot(37).getItem(), menu.getSlot(38).getItem(), menu.getSlot(39).getItem()));
+		ModMessages.sendToServer(new ItemPacketC2S(editTire,
+				GeneratorTile.getItemStack(menu.be, GeneratorMenu.SLOT1),//menu.getSlot(GeneratorMenu.SLOT1).getItem(),
+				GeneratorTile.getItemStack(menu.be, GeneratorMenu.SLOT2),
+				GeneratorTile.getItemStack(menu.be, GeneratorMenu.SLOT3),
+				GeneratorTile.getItemStack(menu.be, GeneratorMenu.SLOT4)));
 		if(editTire > 0) {
 			ModMessages.sendToServer(new SepPacketC2S(editTire, stringToInt(num1.getValue()), stringToInt(num2.getValue()), stringToInt(num3.getValue())));
 		}
@@ -290,7 +278,11 @@ public class GeneratorScreen extends AbstractContainerScreen<GeneratorMenu> impl
 	@Override
 	public void onPress(Button btn) {
 		Minecraft.getInstance().gameMode.handleInventoryButtonClick(this.menu.containerId, 0);
-		ModMessages.sendToServer(new ItemPacketC2S(editTire, menu.getSlot(36).getItem(), menu.getSlot(37).getItem(), menu.getSlot(38).getItem(), menu.getSlot(39).getItem()));
+		ModMessages.sendToServer(new ItemPacketC2S(editTire,
+				GeneratorTile.getItemStack(menu.be, GeneratorMenu.SLOT1),//menu.getSlot(GeneratorMenu.SLOT1).getItem(),
+				GeneratorTile.getItemStack(menu.be, GeneratorMenu.SLOT2),
+				GeneratorTile.getItemStack(menu.be, GeneratorMenu.SLOT3),
+				GeneratorTile.getItemStack(menu.be, GeneratorMenu.SLOT4)));
 		if(editTire > 0) {
 			ModMessages.sendToServer(new SepPacketC2S(editTire, stringToInt(num1.getValue()), stringToInt(num2.getValue()), stringToInt(num3.getValue())));
 			

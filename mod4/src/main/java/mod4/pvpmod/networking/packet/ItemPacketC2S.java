@@ -4,6 +4,7 @@ package mod4.pvpmod.networking.packet;
 import java.util.function.Supplier;
 
 import mod4.pvpmod.blocks.generator.GeneratorMenu;
+import mod4.pvpmod.blocks.generator.GeneratorTile;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.Item;
@@ -50,15 +51,16 @@ public class ItemPacketC2S {
 			ServerPlayer player = context.getSender();
 			GeneratorMenu menu = (GeneratorMenu)player.containerMenu;
 			
-			menu.getSlot(36).set(ItemStack.EMPTY);
-			menu.getSlot(37).set(ItemStack.EMPTY);
-			menu.getSlot(38).set(ItemStack.EMPTY);
-			menu.getSlot(39).set(ItemStack.EMPTY);
+//			menu.getSlot(GeneratorMenu.SLOT1).set(ItemStack.EMPTY);
+//			menu.getSlot(GeneratorMenu.SLOT2).set(ItemStack.EMPTY);
+//			menu.getSlot(GeneratorMenu.SLOT3).set(ItemStack.EMPTY);
+//			menu.getSlot(GeneratorMenu.SLOT4).set(ItemStack.EMPTY);
 			
-//			GeneratorTile.removeItem(menu.be, 39);
-//			GeneratorTile.removeItem(menu.be, 38);
-//			GeneratorTile.removeItem(menu.be, 37);
-//			GeneratorTile.removeItem(menu.be, 36);
+			GeneratorTile.removeItem(menu.be, GeneratorMenu.SLOT1);
+			GeneratorTile.removeItem(menu.be, GeneratorMenu.SLOT2);
+			GeneratorTile.removeItem(menu.be, GeneratorMenu.SLOT3);
+			GeneratorTile.removeItem(menu.be, GeneratorMenu.SLOT4);
+			
 			System.out.println("--------------------save" + tire);
 			switch(tire) {
 			case 0:

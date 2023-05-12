@@ -13,6 +13,7 @@ import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraftforge.items.CapabilityItemHandler;
 
 @SuppressWarnings("removal")
 public class GeneratorMenu extends AbstractContainerMenu{
@@ -36,6 +37,11 @@ public class GeneratorMenu extends AbstractContainerMenu{
 	
 	private static final int TE_INVENTORY_SLOT_COUNT = 4;//GeneratorTileのitemHandlerの値と同じにする
 	
+	public static final int SLOT1 = 0;
+	public static final int SLOT2 = 1;
+	public static final int SLOT3 = 2;
+	public static final int SLOT4 = 3;
+	
 	public GeneratorMenu(int id, Inventory inv, FriendlyByteBuf extraData) {
 		this(id, inv, inv.player.level.getBlockEntity(extraData.readBlockPos()), new SimpleContainerData(59));//GeneratorTileのコンストラクターのgetCount()の値と同じにする
 	}
@@ -50,26 +56,29 @@ public class GeneratorMenu extends AbstractContainerMenu{
 		addPlayerInventory(inv);//guiにプレイヤーのインベントリも表示する
 		addPlayerHotbar(inv);//guiにプレイヤーのホットバーも表示する
 		
-		slot1 = new ItemSlot(inv, 36, 10, 30, 0);
-		this.addSlot(slot1);
+//		slot1 = new ItemSlot(inv, 100, 10, 30, 0);
+//		this.addSlot(slot1);
+//		
+//		slot2 = new ItemSlot(inv, 101, 10, 60, 0);
+//		this.addSlot(slot2);
+//		
+//		slot3 = new ItemSlot(inv, 102, 10, 90, 0);
+//		this.addSlot(slot3);
+//		
+//		slot4 = new ItemSlot(inv, 103, 85, 60, 5);
+//		this.addSlot(slot4);
 		
-		slot2 = new ItemSlot(inv, 37, 10, 60, 0);
-		this.addSlot(slot2);
 		
-		slot3 = new ItemSlot(inv, 38, 10, 90, 0);
-		this.addSlot(slot3);
-		
-		slot4 = new ItemSlot(inv, 39, 85, 60, 5);
-		this.addSlot(slot4);
-		
-		
-//		this.be.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(handler -> {
-//			//this.addSlot(new SlotItemHandler(handler, 0, 10, 30));//index = 0,x = 12, y = 15にスロットを追加
-//			this.addSlot(new SlotItemHandler(handler, 1, 10, 60));
-//			this.addSlot(new SlotItemHandler(handler, 2, 10, 90));
-//			this.addSlot(new SlotItemHandler(handler, 3, 85, 60));
-//		});
-		
+		this.be.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(handler -> {
+			slot1 = new ItemSlot(handler, 0, 10, 30, 0);
+			slot2 = new ItemSlot(handler, 1, 10, 60, 0);
+			slot3 = new ItemSlot(handler, 2, 10, 90, 0);
+			slot4 = new ItemSlot(handler, 3, 85, 60, 5);
+			this.addSlot(slot1);//index = 0,x = 12, y = 15にスロットを追加
+			this.addSlot(slot2);
+			this.addSlot(slot3);
+			this.addSlot(slot4);
+		});
 		
 		addDataSlots(data);//アイテム以外のデータを管理
 		

@@ -1,16 +1,16 @@
 package mod4.pvpmod.blocks.generator;
 
-import net.minecraft.world.Container;
-import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.SlotItemHandler;
 
-public class ItemSlot extends Slot{
+public class ItemSlot extends SlotItemHandler{
 	
 	private int tire;
 	private int forbidden;
 
-	public ItemSlot(Container container, int index, int x, int y, int forbidden) {
-		super(container, index, x, y);
+	public ItemSlot(IItemHandler handler, int index, int x, int y, int forbidden) {
+		super(handler, index, x, y);
 		this.forbidden = forbidden;
 	}
 

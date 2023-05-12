@@ -433,13 +433,16 @@ public class GeneratorTile extends BlockEntity implements MenuProvider{
 		int tire = entity.data.get(TIRE_INDEX);
 		int progress = entity.data.get(PROGRESS_INDEX);
 		if(tire > 0) {
-			if(progress % (entity.data.get(0 + (tire - 1) * 3) * 20) == 0) {
+			if(tire >= entity.data.get(GeneratorTile.MAXUPGRADE_INDEX)) {
+				tire = entity.data.get(GeneratorTile.MAXUPGRADE_INDEX);
+			}
+			if(progress % (entity.data.get(0 + (tire - 1) * 3) * 20) == 0 && entity.data.get(15 + (tire - 1) * 3) != 0) {
 				world.addFreshEntity(new ItemEntity(world, pos.getX() + 0.5f, pos.getY() + 1, pos.getZ() + 0.5f, new ItemStack(Item.byId(entity.data.get(15 + (tire - 1) * 3)), entity.data.get(30 + (tire - 1) * 3))));
 			}
-			if(progress % (entity.data.get(1 + (tire - 1) * 3) * 20) == 0){
+			if(progress % (entity.data.get(1 + (tire - 1) * 3) * 20) == 0 && entity.data.get(16 + (tire - 1) * 3) != 0){
 				world.addFreshEntity(new ItemEntity(world, pos.getX() + 0.5f, pos.getY() + 1, pos.getZ() + 0.5f, new ItemStack(Item.byId(entity.data.get(16 + (tire - 1) * 3)), entity.data.get(31 + (tire - 1) * 3))));
 			}
-			if(progress % (entity.data.get(2 + (tire - 1) * 3) * 20) == 0){
+			if(progress % (entity.data.get(2 + (tire - 1) * 3) * 20) == 0 && entity.data.get(17 + (tire - 1) * 3) != 0){
 				world.addFreshEntity(new ItemEntity(world, pos.getX() + 0.5f, pos.getY() + 1, pos.getZ() + 0.5f, new ItemStack(Item.byId(entity.data.get(17 + (tire - 1) * 3)), entity.data.get(32 + (tire - 1) * 3))));
 			}	
 			if(progress >=(entity.data.get(1 + (tire - 1) * 3) * 20) * (entity.data.get(1 + (tire - 1) * 3) * 20) * (entity.data.get(2 + (tire - 1) * 3) * 20)){
@@ -454,12 +457,15 @@ public class GeneratorTile extends BlockEntity implements MenuProvider{
 	}
 	
 	public static void removeItem(GeneratorTile tile, int slotIndex) {
-		tile.itemHandler.extractItem(slotIndex - 36, tile.itemHandler.getStackInSlot(slotIndex - 36).getCount(), false);
+		tile.itemHandler.extractItem(slotIndex, tile.itemHandler.getStackInSlot(slotIndex).getCount(), false);
+	}
 	
+	public static ItemStack getItemStack(GeneratorTile tile, int slotIndex) {
+		return tile.itemHandler.getStackInSlot(slotIndex);
 	}
 	
 	public static void insertItem(GeneratorTile tile, int slotIndex, ItemStack stack) {
-		tile.itemHandler.insertItem(slotIndex - 36, stack, false);
+		tile.itemHandler.insertItem(slotIndex, stack, false);
 	}
 
 
