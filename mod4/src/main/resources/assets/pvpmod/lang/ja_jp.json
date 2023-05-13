@@ -4,6 +4,7 @@
 	"item.pvpmod.lod":"ジャンプロッド",
 	"item.pvpmod.jump_boots":"スーパーブーツ",
 	"block.pvpmod.smile_block":"スマイルブロック",
+	"block.pvpmod.generator":"ジェネレーター",
 	"gui.pvpmod.generator.activate":"起動",
 	"gui.pvpmod.generator.upgread":"アップグレード",
 	"gui.pvpmod.generator.confirm_button":"次へ",

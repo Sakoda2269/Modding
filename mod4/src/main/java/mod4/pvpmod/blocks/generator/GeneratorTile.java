@@ -6,6 +6,7 @@ import org.jetbrains.annotations.Nullable;
 import mod4.pvpmod.init.TileEntityInit;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.Containers;
@@ -427,23 +428,49 @@ public class GeneratorTile extends BlockEntity implements MenuProvider{
 	}
 
 	public static void tick(Level world, BlockPos pos, BlockState state, GeneratorTile entity) {//1/20秒ごとに処理をする
+		int tire = entity.data.get(TIRE_INDEX);
 		if(world.isClientSide) {
+			if(tire == 0) {
+				for(int i = 0; i < 5; i++) {
+					world.addAlwaysVisibleParticle(ParticleTypes.SMOKE, pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, Math.random() * 0.09 - 0.045, 0.03, Math.random() * 0.09 -0.045);
+				}
+			}
 			return;
 		}
-		int tire = entity.data.get(TIRE_INDEX);
+		
 		int progress = entity.data.get(PROGRESS_INDEX);
+		int brokenProg = 0;
+		int life = 2000;
+		
+		if(tire == 0) {
+			if(brokenProg >=200){
+				brokenProg = 0;
+			}else {
+				world.addAlwaysVisibleParticle(ParticleTypes.SMOKE, pos.getX(), pos.getY() + 1, pos.getZ(), 1, 1, 1);
+				brokenProg += 1;
+			}
+		}
 		if(tire > 0) {
 			if(tire >= entity.data.get(GeneratorTile.MAXUPGRADE_INDEX)) {
 				tire = entity.data.get(GeneratorTile.MAXUPGRADE_INDEX);
 			}
 			if(progress % (entity.data.get(0 + (tire - 1) * 3) * 20) == 0 && entity.data.get(15 + (tire - 1) * 3) != 0) {
-				world.addFreshEntity(new ItemEntity(world, pos.getX() + 0.5f, pos.getY() + 1, pos.getZ() + 0.5f, new ItemStack(Item.byId(entity.data.get(15 + (tire - 1) * 3)), entity.data.get(30 + (tire - 1) * 3))));
+				ItemStack item = new ItemStack(Item.byId(entity.data.get(15 + (tire - 1) * 3)), entity.data.get(30 + (tire - 1) * 3));
+				ItemEntity itemE = new ItemEntity(world, pos.getX() + 0.5f, pos.getY() + 1, pos.getZ() + 0.5f, item);
+				itemE.lifespan = life;
+				world.addFreshEntity(itemE);
 			}
 			if(progress % (entity.data.get(1 + (tire - 1) * 3) * 20) == 0 && entity.data.get(16 + (tire - 1) * 3) != 0){
-				world.addFreshEntity(new ItemEntity(world, pos.getX() + 0.5f, pos.getY() + 1, pos.getZ() + 0.5f, new ItemStack(Item.byId(entity.data.get(16 + (tire - 1) * 3)), entity.data.get(31 + (tire - 1) * 3))));
+				ItemStack item = new ItemStack(Item.byId(entity.data.get(16 + (tire - 1) * 3)), entity.data.get(31 + (tire - 1) * 3));
+				ItemEntity itemE = new ItemEntity(world, pos.getX() + 0.5f, pos.getY() + 1, pos.getZ() + 0.5f, item);
+				itemE.lifespan = life;
+				world.addFreshEntity(itemE);
 			}
 			if(progress % (entity.data.get(2 + (tire - 1) * 3) * 20) == 0 && entity.data.get(17 + (tire - 1) * 3) != 0){
-				world.addFreshEntity(new ItemEntity(world, pos.getX() + 0.5f, pos.getY() + 1, pos.getZ() + 0.5f, new ItemStack(Item.byId(entity.data.get(17 + (tire - 1) * 3)), entity.data.get(32 + (tire - 1) * 3))));
+				ItemStack item = new ItemStack(Item.byId(entity.data.get(17 + (tire - 1) * 3)), entity.data.get(32 + (tire - 1) * 3));
+				ItemEntity itemE = new ItemEntity(world, pos.getX() + 0.5f, pos.getY() + 1, pos.getZ() + 0.5f, item);
+				itemE.lifespan = life;
+				world.addFreshEntity(itemE);
 			}	
 			if(progress >=(entity.data.get(1 + (tire - 1) * 3) * 20) * (entity.data.get(1 + (tire - 1) * 3) * 20) * (entity.data.get(2 + (tire - 1) * 3) * 20)){
 				entity.data.set(PROGRESS_INDEX, 0);
