@@ -22,6 +22,8 @@ public class ShopMenu extends AbstractContainerMenu{
 	public final ShopTile be;
 	public final Level level;
 	public final ContainerData data;
+
+	//aaa
 	
 	public SlotItemHandler slot1;
 	public SlotItemHandler slot2;
