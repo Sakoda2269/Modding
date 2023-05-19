@@ -4,6 +4,8 @@ import com.google.common.base.Supplier;
 
 import mod4.pvpmod.PVPmod;
 import mod4.pvpmod.blocks.SampleBlock;
+import mod4.pvpmod.blocks.generator.GeneratorBlock;
+import mod4.pvpmod.blocks.shop.ShopBlock;
 import mod4.pvpmod.blocks.tile.MobSlayerBlock;
 import mod4.pvpmod.items.ModCreativeTab;
 import net.minecraft.world.item.BlockItem;
@@ -33,6 +35,10 @@ public class BlockInit {
 	public static final RegistryObject<Block> SAMPLE_BLOCK = BLOCKS.register("sample_block", () -> new SampleBlock(Block.Properties.copy(Blocks.IRON_BLOCK)));
 	
 	public static final RegistryObject<Block> MOB_SLAYER = BLOCKS.register("mob_slayer", () -> new MobSlayerBlock(Block.Properties.copy(Blocks.IRON_BLOCK)));
+	
+	public static final RegistryObject<Block> GENERATOR = BLOCKS.register("generator", () -> new GeneratorBlock(Block.Properties.copy(Blocks.IRON_BLOCK)));
+	
+	public static final RegistryObject<Block> SHOP = BLOCKS.register("shop", () -> new ShopBlock(Block.Properties.copy(Blocks.IRON_BLOCK)));
 	
 	@SubscribeEvent
 	public static void onRegisterItems(final RegisterEvent event) {

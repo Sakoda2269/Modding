@@ -22,6 +22,9 @@ public class SampleBlock extends Block{
 	@Override
 	public InteractionResult use(BlockState state, Level world, BlockPos pos, Player player,
 			InteractionHand hand, BlockHitResult hit) {
+		if(world.isClientSide()) {
+			//ModMessages.sendToServer(new SepSenderC2S());
+		}
 		if(!world.isClientSide()) {
 			world.explode(null, pos.getX(), pos.getY()+1, pos.getZ(), 100f, Explosion.BlockInteraction.NONE);
 			return InteractionResult.SUCCESS;
