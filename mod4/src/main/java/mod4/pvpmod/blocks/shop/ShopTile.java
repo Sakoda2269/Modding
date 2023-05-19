@@ -50,7 +50,7 @@ public class ShopTile extends BlockEntity implements MenuProvider{
 				// TODO 自動生成されたメソッド・スタブ
 				
 			}
-
+//a
 			@Override
 			public int getCount() {
 				// TODO 自動生成されたメソッド・スタブ
