@@ -101,7 +101,14 @@ public class ShopTile extends BlockEntity implements MenuProvider{
 	
 	@Override
 	public AbstractContainerMenu createMenu(int id, Inventory inventoty, Player player) {
-		return new ShopMenu(id, inventoty, this, this.data);
+		if(player.isCreative()) {
+			System.out.println("aaa");
+			return new ShopMenu(id, inventoty, this, this.data);
+		} else {
+			System.out.println("iii");
+			return new ShopMenu2(id, inventoty, this, this.data);
+		}
+		
 	}
 
 	@Override

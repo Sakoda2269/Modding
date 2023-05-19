@@ -10,7 +10,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 
-public class ShopScreen extends AbstractContainerScreen<ShopMenu> {
+public class ShopScreen2 extends AbstractContainerScreen<ShopMenu2> {
 	
 	private static final ResourceLocation TEXTURE = new ResourceLocation(PVPmod.MOD_ID, "textures/gui/dispenser.png");
 
@@ -20,7 +20,7 @@ public class ShopScreen extends AbstractContainerScreen<ShopMenu> {
 		super.init();
 	}
 
-	public ShopScreen(ShopMenu menu, Inventory inv, Component component) {
+	public ShopScreen2(ShopMenu2 menu, Inventory inv, Component component) {
 		super(menu, inv, component);
 	}
 

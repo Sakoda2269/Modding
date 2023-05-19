@@ -17,7 +17,7 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
 
 @SuppressWarnings("removal")
-public class ShopMenu extends AbstractContainerMenu{
+public class ShopMenu2 extends AbstractContainerMenu{
 	
 	public final ShopTile be;
 	public final Level level;
@@ -36,12 +36,12 @@ public class ShopMenu extends AbstractContainerMenu{
 	
 	private static final int TE_INVENTORY_SLOT_COUNT = 2;
 	
-	public ShopMenu(int id, Inventory inv, FriendlyByteBuf extraData) {
+	public ShopMenu2(int id, Inventory inv, FriendlyByteBuf extraData) {
 		this(id,  inv, inv.player.level.getBlockEntity(extraData.readBlockPos()), new SimpleContainerData(1));
 	}
 
-	public ShopMenu(int id, Inventory inv, BlockEntity entity, ContainerData data) {
-		super(MenuInit.SHOP_MENU.get(), id);
+	public ShopMenu2(int id, Inventory inv, BlockEntity entity, ContainerData data) {
+		super(MenuInit.SHOP_MENU2.get(), id);
 		checkContainerSize(inv, 4);//GeneratorTileのitemHandlerの値と同じにする
 		be = (ShopTile) entity;
 		this.level = inv.player.level;
