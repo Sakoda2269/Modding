@@ -24,7 +24,7 @@ import net.minecraftforge.items.ItemStackHandler;
 @SuppressWarnings("removal")
 public class ShopTile extends BlockEntity implements MenuProvider{
 	
-	private final ItemStackHandler itemHandler = new ItemStackHandler(30) {
+	private final ItemStackHandler itemHandler = new ItemStackHandler(40) {
 		@Override
 		protected void onContentsChanged(int slot) {
 			setChanged();
@@ -32,6 +32,20 @@ public class ShopTile extends BlockEntity implements MenuProvider{
 	};
 	
 	protected final ContainerData data;
+	
+	private static final int SELL_ITEM_INDEX = 120;
+	private static final int SELL_NUM_INDEX = 240;
+	private static final int COST_ITEM_INDEX = 360;
+	private static final int COST_NUM_INDEX = 480;
+	private static final int PAGE_INDEX = 480;
+	private static final int COUNT = 481;
+	
+	private int[][] sellItem = new int[6][20];
+	private int[][] sellNum = new int[6][20];
+	private int[][] costItem = new int[6][20];
+	private int[][] costNum = new int[6][20];
+	private int page = 0;
+	
 	
 	private LazyOptional<IItemHandler> lazyItemHandler = LazyOptional.empty();
 
@@ -41,20 +55,39 @@ public class ShopTile extends BlockEntity implements MenuProvider{
 
 			@Override
 			public int get(int index) {
-				// TODO 自動生成されたメソッド・スタブ
+				if(index < SELL_ITEM_INDEX) {
+					return sellItem[(int)(index / 20)][index % 20];
+				} else if(index < SELL_NUM_INDEX) {
+					return sellNum[(int)((index - 120) / 20)][index % 20];
+				} else if(index < COST_ITEM_INDEX) {
+					return costItem[(int)((index - 240) / 20)][index % 20];
+				} else if(index < COST_NUM_INDEX) {
+					return costNum[(int)((index - 360) / 20)][index % 20];
+				} else if(index == PAGE_INDEX) {
+					return page;
+				}
 				return 0;
 			}
 
 			@Override
 			public void set(int index, int value) {
-				// TODO 自動生成されたメソッド・スタブ
-				
+				if(index < SELL_ITEM_INDEX) {
+					sellItem[(int)(index / 20)][index % 20] = value;
+				} else if(index < SELL_NUM_INDEX) {
+					sellNum[(int)(index / 20)][index % 20] = value;
+				} else if(index < COST_ITEM_INDEX) {
+					costItem[(int)(index / 20)][index % 20] = value;
+				} else if(index < COST_NUM_INDEX) {
+					costNum[(int)(index / 20)][index % 20] = value;
+				} else if(index == PAGE_INDEX) {
+					page = value;
+				}
 			}
 			
 			@Override
 			public int getCount() {
 				// TODO 自動生成されたメソッド・スタブ
-				return 0;
+				return COUNT;
 			}
 			
 		};
@@ -65,6 +98,15 @@ public class ShopTile extends BlockEntity implements MenuProvider{
 	@Override
 	public void load(CompoundTag nbt) {
 		itemHandler.deserializeNBT(nbt.getCompound("inventory"));
+		for(int i = 0; i < 6; i++) {
+			for(int j = 0; j < 20; j++) {
+				sellItem[i][j] = nbt.getInt("sellItems" + i + "" +  j);
+				sellNum[i][j] = nbt.getInt("sellNums" + i + "" + j);
+				costItem[i][j] = nbt.getInt("costItems" + i + "" +  j);
+				costNum[i][j] = nbt.getInt("costlNums" + i + "" + j);
+			}
+		}
+		page = nbt.getInt("page");
 		super.load(nbt);
 	}
 
@@ -72,6 +114,15 @@ public class ShopTile extends BlockEntity implements MenuProvider{
 	@Override
 	protected void saveAdditional(CompoundTag nbt) {
 		nbt.put("inventory", itemHandler.serializeNBT());
+		for(int i = 0; i < 6; i++) {
+			for(int j = 0; j < 20; j++) {
+				nbt.putInt("sellItems" + i + "" +  j, sellItem[i][j]);
+				nbt.putInt("sellNums" + i + "" + j, sellNum[i][j]);
+				nbt.putInt("costItems" + i + "" +  j, costItem[i][j]);
+				nbt.putInt("costlNums" + i + "" + j, costNum[i][j]);
+			}
+		}
+		nbt.putInt("page", page);
 		super.saveAdditional(nbt);
 	}
 

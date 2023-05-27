@@ -24,8 +24,10 @@ public class ShopMenu extends AbstractContainerMenu{
 
 	//aaa
 	//aaa
+	private static final int TE_INVENTORY_SLOT_COUNT = 40;
 	
-	public ItemSlot[] mySlots = new ItemSlot[30];
+	
+	public ItemSlot[] mySlots = new ItemSlot[TE_INVENTORY_SLOT_COUNT];
 	
 	private static final int HOTBAR_SLOT_COUNT = 9;
 	private static final int PLAYER_INVENTORY_ROW_COUNT = 3;
@@ -35,15 +37,15 @@ public class ShopMenu extends AbstractContainerMenu{
 	private static final int VANILLA_FIRST_SLOT_INDEX = 0;
 	private static final int TE_INVENTORY_FIRST_SLOT_INDEX = VANILLA_FIRST_SLOT_INDEX + VANILLA_SLOT_COUNT;
 	
-	private static final int TE_INVENTORY_SLOT_COUNT = 30;
+	
 	
 	public ShopMenu(int id, Inventory inv, FriendlyByteBuf extraData) {
-		this(id,  inv, inv.player.level.getBlockEntity(extraData.readBlockPos()), new SimpleContainerData(1));
+		this(id,  inv, inv.player.level.getBlockEntity(extraData.readBlockPos()), new SimpleContainerData(481));
 	}
 
 	public ShopMenu(int id, Inventory inv, BlockEntity entity, ContainerData data) {
 		super(MenuInit.SHOP_MENU.get(), id);
-		checkContainerSize(inv, 30);//GeneratorTileのitemHandlerの値と同じにする
+		checkContainerSize(inv, TE_INVENTORY_SLOT_COUNT);//GeneratorTileのitemHandlerの値と同じにする
 		be = (ShopTile) entity;
 		this.level = inv.player.level;
 		this.data= data;
@@ -55,17 +57,21 @@ public class ShopMenu extends AbstractContainerMenu{
 			for(int i = 0; i < mySlots.length; i++) {
 				int x;
 				if(i <= 4) {
-					x = 19;
+					x = -55;
 				}else if(i <= 9) {
-					x = 50;
+					x = -24;
 				}else if(i <= 14) {
-					x = 90;
+					x = 16;
 				}else if(i <= 19) {
-					x = 121;
+					x = 47;
 				}else if(i <= 24) {
-					x = 160;
+					x = 86;
+				}else if(i <= 29){
+					x = 117;
+				}else if(i <= 34) {
+					x = 155;
 				}else {
-					x = 191;
+					x = 186;
 				}
 				int y = (i % 5) * 22 + 34;
 				mySlots[i] = new ItemSlot(handler, i, x, y);
@@ -116,14 +122,14 @@ public class ShopMenu extends AbstractContainerMenu{
 	private void addPlayerInventory(Inventory playerInv) {//プレイヤーのインベントリの表示
 		for(int i = 0; i < 3; ++i) {
 			for(int j = 0; j < 9; ++j) {
-				this.addSlot(new Slot(playerInv, j + i * 9 + 9, 36 + j * 18, 143 + i * 18));
+				this.addSlot(new Slot(playerInv, j + i * 9 + 9, -7 + j * 18, 143 + i * 18));
 			}
 		}
 	}
 	
 	private void addPlayerHotbar(Inventory playerInv) {//プレイヤーのホットバーの表示
 		for(int i = 0; i < 9; ++i) {
-			this.addSlot(new Slot(playerInv, i, 36 + i * 18, 201));
+			this.addSlot(new Slot(playerInv, i, -7 + i * 18, 201));
 		}
 	}
 

@@ -16,6 +16,7 @@ import net.minecraft.world.entity.player.Inventory;
 public class ShopScreen extends AbstractContainerScreen<ShopMenu> implements OnPress {
 	
 	private static final ResourceLocation TEXTURE = new ResourceLocation(PVPmod.MOD_ID, "textures/gui/shop.png");
+	private static final ResourceLocation TEXTURE2 = new ResourceLocation(PVPmod.MOD_ID, "textures/gui/shop_right.png");
 
 	ImageButton combat;
 	ImageButton armor;
@@ -37,7 +38,7 @@ public class ShopScreen extends AbstractContainerScreen<ShopMenu> implements OnP
 		this.inventoryLabelX = -20;
 		this.inventoryLabelY = -135;
 		this.imageHeight = 230;
-		this.imageWidth = 235;
+		this.imageWidth = 147;
 		combat = new ImageButton(this.leftPos + 15, this.topPos + 5, 21, 21, 0, 0, new ResourceLocation(PVPmod.MOD_ID, "textures/gui/imgbtn.png"), this);
 		this.addRenderableWidget(combat);
 		
@@ -65,10 +66,13 @@ public class ShopScreen extends AbstractContainerScreen<ShopMenu> implements OnP
 		RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
 		RenderSystem.setShaderTexture(0, TEXTURE);
 		
-		int x = (width - imageWidth) / 2;
+		int x = (width - 295) / 2;
 		int y = (height - imageHeight) / 2;
 		
 		this.blit(stack, x, y, 0, 0, imageWidth, imageHeight);
+		
+		RenderSystem.setShaderTexture(0, TEXTURE2);
+		this.blit(stack, x + imageWidth, y, 0, 0, imageWidth, imageHeight);
 		
 	}
 
