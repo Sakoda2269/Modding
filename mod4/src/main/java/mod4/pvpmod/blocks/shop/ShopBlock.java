@@ -36,7 +36,7 @@ public class ShopBlock extends BaseEntityBlock{
 		if(!level.isClientSide()) {
 			BlockEntity be = level.getBlockEntity(pos);
 			NetworkHooks.openScreen((ServerPlayer)player, (ShopTile)be, pos);
-			return InteractionResult.sidedSuccess(level.isClientSide());
+			return InteractionResult.sidedSuccess(level.isClientSide());//aaa
 		}
 		return InteractionResult.sidedSuccess(level.isClientSide());
 	}
