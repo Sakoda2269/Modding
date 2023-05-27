@@ -5,7 +5,6 @@ import org.apache.logging.log4j.Logger;
 
 import mod4.pvpmod.blocks.generator.GeneratorScreen;
 import mod4.pvpmod.blocks.shop.ShopScreen;
-import mod4.pvpmod.blocks.shop.ShopScreen2;
 import mod4.pvpmod.init.BlockInit;
 import mod4.pvpmod.init.ItemInit;
 import mod4.pvpmod.init.MenuInit;
@@ -48,7 +47,6 @@ public class PVPmod {
 		public static void onClientSetup(FMLClientSetupEvent event) {
 			MenuScreens.register(MenuInit.GENERATOR_MENU.get(), GeneratorScreen :: new);
 			MenuScreens.register(MenuInit.SHOP_MENU.get(), ShopScreen :: new);
-			MenuScreens.register(MenuInit.SHOP_MENU2.get(), ShopScreen2 :: new);
 		}
 	}
 	

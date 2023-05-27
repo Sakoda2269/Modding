@@ -24,7 +24,7 @@ import net.minecraftforge.items.ItemStackHandler;
 @SuppressWarnings("removal")
 public class ShopTile extends BlockEntity implements MenuProvider{
 	
-	private final ItemStackHandler itemHandler = new ItemStackHandler(2) {
+	private final ItemStackHandler itemHandler = new ItemStackHandler(30) {
 		@Override
 		protected void onContentsChanged(int slot) {
 			setChanged();
@@ -101,13 +101,14 @@ public class ShopTile extends BlockEntity implements MenuProvider{
 	
 	@Override
 	public AbstractContainerMenu createMenu(int id, Inventory inventoty, Player player) {
-		if(player.isCreative()) {
+		/*if(player.isCreative()) {
 			System.out.println("aaa");
 			return new ShopMenu(id, inventoty, this, this.data);
 		} else {
 			System.out.println("iii");
 			return new ShopMenu2(id, inventoty, this, this.data);
-		}
+		}*/
+		return new ShopMenu(id, inventoty, this, this.data);
 		
 	}
 

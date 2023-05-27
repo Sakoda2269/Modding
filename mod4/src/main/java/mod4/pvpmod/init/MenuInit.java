@@ -3,7 +3,6 @@ package mod4.pvpmod.init;
 import mod4.pvpmod.PVPmod;
 import mod4.pvpmod.blocks.generator.GeneratorMenu;
 import mod4.pvpmod.blocks.shop.ShopMenu;
-import mod4.pvpmod.blocks.shop.ShopMenu2;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraftforge.common.extensions.IForgeMenuType;
@@ -19,7 +18,6 @@ public class MenuInit {
 	public static final RegistryObject<MenuType<GeneratorMenu>> GENERATOR_MENU = registerMenuType(GeneratorMenu::new, "generator_menu");
 	
 	public static final RegistryObject<MenuType<ShopMenu>> SHOP_MENU = registerMenuType(ShopMenu::new, "shop_menu");
-	public static final RegistryObject<MenuType<ShopMenu2>> SHOP_MENU2 = registerMenuType(ShopMenu2::new, "shop_menu2");
 	
 	private static <T extends AbstractContainerMenu> RegistryObject<MenuType<T>> registerMenuType(IContainerFactory<T> factory, String name){
 		return MENUS.register(name, () -> IForgeMenuType.create(factory));
